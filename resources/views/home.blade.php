@@ -1,23 +1,24 @@
 @extends('layouts.app')
 
+
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+    
+    <div class="">
+        @include('_sidebar-links')
+    </div>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    <div class="flex-grow mx-20">
+        @include ('_publish-tweet-panel')
 
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
+        <div class="border border-gray-200 rounded-lg mt-8">
+            @foreach (range(1,10) as $tweet)
+                @include('_tweet')
+            @endforeach
         </div>
     </div>
-</div>
+    
+    <div class="flex-shrink-0   ">
+        @include('_friends-list')
+    </div>
+
 @endsection
