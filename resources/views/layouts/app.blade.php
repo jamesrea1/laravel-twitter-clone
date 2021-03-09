@@ -20,11 +20,13 @@
     <div id="app" class="text-black">
         <section class="px-8 py-8">
             <header class="container mx-auto">
-                <a href="" class="block "><img src="{{ asset('images/logo.svg') }}" alt="Logo" ></a>
+                <a href="" class="block">
+                    <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
+                </a>
             </header>
         </section>
         <section class="px-8">
-            <main class="container mx-auto flex justify-between">
+            <main class="container mx-auto">
                 @yield('content')
             </main>
         </section>

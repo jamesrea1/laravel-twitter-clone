@@ -15,7 +15,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Tweety
+                    <a href="{{ url('/home') }}">Home</a>
                 </div>
 
                 <div class="links">

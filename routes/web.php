@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+Use App\Models\Tweet;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,4 +22,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\TweetController::class, 'index']);
+Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store']);
+
+
+
