@@ -1,5 +1,3 @@
-
-
 <div class="bg-blue-100 rounded-lg p-6 pt-4 pr-20">
     
     <h2 class="text-2xl mb-5 font-bold">Following</h2>

@@ -20,10 +20,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function (){
+    Route::get('/tweets', [App\Http\Controllers\TweetController::class, 'index'])->name('home');
+    Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store']);
+});
+
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\TweetController::class, 'index']);
-Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store']);
-
 
 

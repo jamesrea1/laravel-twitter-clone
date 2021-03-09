@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tweet;
-use App\Models\User;
-
 
 class TweetController extends Controller
 {
@@ -13,8 +11,6 @@ class TweetController extends Controller
     {
         $tweets = auth()->user()->timeline();
         $follows = auth()->user()->follows;
-
-        //dd($follows);
 
         return view('home', [
             'tweets' => $tweets,
