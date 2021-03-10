@@ -5,16 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tweet;
 
-class TweetController extends Controller
+class TweetsController extends Controller
 {
     public function index()
     {
         $tweets = auth()->user()->timeline();
-        $follows = auth()->user()->follows;
 
-        return view('home', [
-            'tweets' => $tweets,
-            'follows' => $follows]);
+        return view('tweets.index', [
+            'tweets' => $tweets
+        ]);
     }
 
     public function store(Request $request)
@@ -28,6 +27,6 @@ class TweetController extends Controller
             'body' => $attributes['body']
         ]);
 
-        return redirect(url('/home'));
+        return redirect(url('/tweets'));
     }
 }  

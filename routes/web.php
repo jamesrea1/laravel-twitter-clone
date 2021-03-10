@@ -1,5 +1,8 @@
 <?php
 
+//DB::listen(function($query){var_dump($query->sql);});
+
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,8 +24,8 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function (){
-    Route::get('/tweets', [App\Http\Controllers\TweetController::class, 'index'])->name('home');
-    Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store']);
+    Route::get('/tweets', [App\Http\Controllers\TweetsController::class, 'index'])->name('home');
+    Route::post('/tweets', [App\Http\Controllers\TweetsController::class, 'store']);
 });
 
 Auth::routes();

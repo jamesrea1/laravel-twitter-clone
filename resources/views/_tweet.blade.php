@@ -1,3 +1,11 @@
+{{-- <div class="">
+    <?php 
+        // get avatar in separate statement to show SQL log in div
+        //$url = $tweet->user->avatar; 
+    ?> 
+</div>  --}}
+
+
 <div class="flex p-4 ">
     <div class="mr-2 flex-shrink-0">
         <img

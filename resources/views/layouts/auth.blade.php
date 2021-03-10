@@ -27,19 +27,9 @@
         </section>
         <section class="px-8">
             <main class="container mx-auto">
-                <div class="flex justify-between">
-                    <div class="">
-                        @include('_sidebar-links')
-                    </div>
-            
-                    <div class="flex-grow mx-20 mb-20">
-                        @yield('content')
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-1/6">
-                        @include('_friends-list')
-                    </div>
-                </div>
+
+                @yield('content')
+                
             </main>
         </section>
     </div>
