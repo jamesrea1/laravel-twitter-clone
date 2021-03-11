@@ -1,15 +1,21 @@
-<div class="bg-gray-200 rounded-lg py-4 px-6">
+<div class="bg-bluegray-100 rounded-xl py-4 px-6">
     
-    <h2 class="text-2xl mb-5 font-bold">Following</h2>
+    <h3 class="text-xl mb-5 font-bold">Friends</h3>
     
-    @foreach(auth()->user()->follows as $user )
-        <div class="flex mb-4 items-center">
-            <img src="{{ $user->avatar }}" alt="Profile Pic" class="w-10 h-10 block rounded-full">
-            <div class="ml-4 ">
-                {{ $user->name }}
-            </div>
-        </div>
-    @endforeach
-
+    <ul>
+        @foreach(auth()->user()->follows as $user )
+            <li class="mb-4">
+                <div class="">
+                    <a href="{{ route('profile', $user) }}" class="flex items-center">
+                        <img src="{{ $user->avatar }}" alt="Profile Pic" class="block rounded-full" width="40" height="40">
+                        <div class="ml-4 text-sm">
+                            {{ $user->name }}
+                        </div>
+                    </a>
+                </div>
+            </li>
+        @endforeach
+    </ul>
+    
 </div>
 

@@ -1,4 +1,4 @@
-<div class="border-blue-400 border rounded-lg p-8">
+<div class="border-lightblue-400 border rounded-xl mb-8 p-8">
     <form action="{{ url('tweets') }}" method="POST">
         @csrf
         <textarea 
@@ -12,8 +12,8 @@
             <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
         @enderror
         <div class="flex justify-between mt-4">
-            <img src="{{ auth()->user()->avatar }}" alt="" class="rounded-full w-10 h-10 block">
-            <button type="submit" class="bg-blue-500 text-white rounded-lg shadow px-4 py-2" >Tweet-a-roo!</button>
+            <img src="{{ auth()->user()->avatar }}" alt="" class="rounded-full block" width="40" height="40">
+            <button type="submit" class="bg-lightblue-500 text-white rounded-lg shadow px-4 py-2" >Tweet-a-roo!</button>
         </div>
     </form>
 </div>

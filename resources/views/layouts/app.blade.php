@@ -18,30 +18,26 @@
 </head>
 <body>
     <div id="app" class="text-black">
-        <section class="px-8 py-8">
-            <header class="container mx-auto">
-                <a href="" class="block">
-                    <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
-                </a>
-            </header>
-        </section>
-        <section class="px-8">
-            <main class="container mx-auto">
-                <div class="flex justify-between">
-                    <div class="">
-                        @include('_sidebar-links')
-                    </div>
-            
-                    <div class="flex-grow mx-20 mb-20">
-                        @yield('content')
-                    </div>
-                    
-                    <div class="flex-shrink-0 w-1/6">
-                        @include('_friends-list')
-                    </div>
-                </div>
-            </main>
-        </section>
+        <header class="container mx-auto px-8 py-8">
+            <a href="" class="block">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
+            </a>
+        </header>
+        <main class="container mx-auto px-8">
+            <div class="flex justify-between">
+                <section class="">
+                    @include('_sidebar-links')
+                </section>
+        
+                <section class="flex-grow mx-20 mb-20">
+                    @yield('content')
+                </section>
+                
+                <section class="flex-shrink-0 w-1/6">
+                    @include('_friends-list')
+                </section>
+            </div>
+        </main>
     </div>
 </body>
 </html>

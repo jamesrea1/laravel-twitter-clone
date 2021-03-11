@@ -43,7 +43,7 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return 'https://i.pravatar.cc/48?u='.$this->email;
+        return 'https://i.pravatar.cc/150?u='.$this->email;
     }
 
     public function timeline()
@@ -74,4 +74,10 @@ class User extends Authenticatable
                 'following_user_id')
                 ->withTimestamps();
     }
+
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+    
 }
