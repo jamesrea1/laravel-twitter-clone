@@ -18,20 +18,13 @@
 </head>
 <body>
     <div id="app" class="text-black">
-        <section class="px-8 py-8">
-            <header class="container mx-auto">
-                <a href="" class="block">
-                    <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
-                </a>
-            </header>
-        </section>
-        <section class="px-8">
-            <main class="container mx-auto">
+        <header class="container mx-auto px-8 py-8">
+            <a href="/" class="">
+                <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
+            </a>
+        </header>
 
-                @yield('content')
-                
-            </main>
-        </section>
+        {{ $slot }}
     </div>
 </body>
 </html>
