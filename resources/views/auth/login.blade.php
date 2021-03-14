@@ -11,17 +11,16 @@
                 <label for="email" class="text-sm">{{ __('E-Mail Address') }}</label>
 
                 <div class="">
-                    <input 
-                        id="email" 
-                        type="email" 
-                        class="border rounded px-2 py-1 
-                            {{$errors->has('email')?'border-red-600':'border-gray-600'}}
-                        " 
-                        name="email" 
-                        value="{{ old('email') }}" 
-                        required
-                        autocomplete="email" 
-                        autofocus
+                    <input id="email" 
+                           type="email" 
+                           class="border rounded px-2 py-1 
+                               {{$errors->has('email')?'border-red-600':'border-gray-600'}}
+                           " 
+                           name="email" 
+                           value="{{ old('email') }}" 
+                           required
+                           autocomplete="email" 
+                           autofocus
                     >
 
                     @error('email')
@@ -36,15 +35,14 @@
                 <label for="password" class="text-sm">{{ __('Password') }}</label>
 
                 <div class="">
-                    <input 
-                        id="password" 
-                        type="password" 
-                        class="border rounded px-2 py-1 
-                            {{$errors->has('password')?'border-red-600':'border-gray-600'}}
-                        " 
-                        name="password" 
-                        required
-                        autocomplete="current-password"
+                    <input id="password" 
+                           type="password" 
+                           class="border rounded px-2 py-1 
+                               {{$errors->has('password')?'border-red-600':'border-gray-600'}}
+                           " 
+                           name="password" 
+                           required
+                           autocomplete="current-password"
                     >
 
                     @error('password')

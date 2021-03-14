@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<x-app>
     <header class="mb-10">
         
         <div class="relative mb-3">
@@ -13,8 +11,10 @@
                 <p class="text-sm">Joined {{$user->created_at->diffForHumans() }}</p>
             </div>
             <div class="flex align-middle">
-                <a href="" class="rounded-full text-black border mr-3        py-2 px-6 text-xs ">Edit Profile</a>
-                <a href="" class="rounded-full text-white bg-lightblue-500 py-2 px-6 text-xs shadow-lg">Follow Me</a>
+                @if(auth()->user()->is($user))
+                    <a href="" class="rounded-full text-black border py-2 px-6 text-xs ">Edit Profile</a>
+                @endif
+                <x-follow-button :user="$user" />
             </div>
         </div>
         <p class="text-sm text-center">
@@ -29,4 +29,4 @@
         'tweets' => $user->tweets
     ])
 
-@endsection
+</x-app>
