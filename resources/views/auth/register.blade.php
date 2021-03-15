@@ -8,6 +8,30 @@
             @csrf
 
             <div class="mb-2">
+                <label for="username" class="text-sm">{{ __('Username') }}</label>
+
+                <div class="col-md-6">
+                    <input id="username" 
+                           type="text" 
+                           class="border rounded px-2 py-1 
+                               {{$errors->has('username')?'border-red-600':'border-gray-600'}}
+                           " 
+                           name="username" 
+                           value="{{ old('username') }}" 
+                           required 
+                           autocomplete="username" 
+                           autofocus
+                    >
+
+                    @error('username')
+                        <span class="ml-2 text-sm text-red-600" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="mb-2">
                 <label for="name" class="text-sm">{{ __('Name') }}</label>
 
                 <div class="col-md-6">
@@ -20,7 +44,6 @@
                            value="{{ old('name') }}" 
                            required 
                            autocomplete="name" 
-                           autofocus
                     >
 
                     @error('name')
