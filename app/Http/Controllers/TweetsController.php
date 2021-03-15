@@ -9,7 +9,7 @@ class TweetsController extends Controller
 {
     public function index()
     {
-        $tweets = auth()->user()->timeline();
+        $tweets = current_user()->timeline();
 
         return view('tweets.index', [
             'tweets' => $tweets

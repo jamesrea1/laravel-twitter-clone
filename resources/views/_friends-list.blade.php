@@ -3,7 +3,7 @@
     <h3 class="text-xl mb-5 font-bold">Friends</h3>
     
     <ul>
-        @foreach(auth()->user()->follows as $user )
+        @foreach(current_user()->follows as $user )
             <li class="mb-4">
                 <div class="">
                     <a href="{{ $user->path() }}" class="flex items-center">

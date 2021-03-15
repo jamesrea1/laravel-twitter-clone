@@ -12,4 +12,13 @@ class ProfilesController extends Controller
         return view('profiles.show')
             ->with(compact('user'));
     }
+
+    public function edit(User $user)
+    {
+        //abort_if(current_user()->isNot($user) , 403);   // move check to policy
+        
+        //$this->authorize("edit", $user);  // check here or on the route
+
+        return view('profiles.edit');
+    }
 }
