@@ -1,9 +1,9 @@
 <div class="bg-bluegray-100 rounded-xl py-4 px-6">
     
-    <h3 class="text-xl mb-5 font-bold">Friends</h3>
+    <h3 class="text-xl mb-5 font-bold">Following</h3>
     
     <ul>
-        @foreach(current_user()->follows as $user )
+        @forelse(current_user()->follows as $user )
             <li class="mb-4">
                 <div class="">
                     <a href="{{ $user->path() }}" class="flex items-center">
@@ -14,7 +14,9 @@
                     </a>
                 </div>
             </li>
-        @endforeach
+        @empty
+            <li class="">No friends yet!</li>
+        @endforelse
     </ul>
     
 </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 
 class ProfilesController extends Controller
@@ -19,6 +20,39 @@ class ProfilesController extends Controller
         
         //$this->authorize("edit", $user);  // check here or on the route
 
-        return view('profiles.edit');
+        return view('profiles.edit')
+            ->with(compact('user'));
+    }
+
+    public function update(User $user)
+    {
+        $attributes = request()->validate([
+            'username' => [
+                'string',
+                'required',
+                'max:255',
+                'alpha_dash',
+                Rule::unique('users')->ignore($user),
+            ],
+            'name' => ['string', 'required', 'max:255'],
+            'email' => [
+                'string',
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user),
+            ],
+            'password' => [
+                'string',
+                'required',
+                'min:8',
+                'max:255',
+                'confirmed',
+            ],
+        ]);
+
+        $user->update($attributes);
+
+        return redirect($user->path());
     }
 }
