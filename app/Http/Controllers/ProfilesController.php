@@ -34,7 +34,14 @@ class ProfilesController extends Controller
                 'alpha_dash',
                 Rule::unique('users')->ignore($user),
             ],
-            'name' => ['string', 'required', 'max:255'],
+            'name' => [
+                'string', 
+                'required', 
+                'max:255',
+            ],
+            'avatar' => [
+                'image',
+            ],
             'email' => [
                 'string',
                 'required',
@@ -50,6 +57,11 @@ class ProfilesController extends Controller
                 'confirmed',
             ],
         ]);
+
+        if(request('avatar'))
+        {
+            $attributes['avatar'] = request('avatar')->store('avatars');
+        }
 
         $user->update($attributes);
 

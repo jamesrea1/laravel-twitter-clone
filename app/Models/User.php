@@ -19,6 +19,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'name',
+        'avatar',
         'email',
         'password',
     ];
@@ -42,10 +43,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getAvatarAttribute()
-    {
-        return 'https://i.pravatar.cc/150?u='.$this->email;
+
+    public function setPasswordAttribute($value) 
+    { 
+            $this->attributes['password'] = bcrypt($value); 
     }
+
+
+    public function getAvatarAttribute($value)
+    {
+        return asset("storage/{$value}");
+    }
+
 
     public function timeline()
     {
@@ -56,11 +65,13 @@ class User extends Authenticatable
                     ->latest()->get();
     }
 
+
     public function tweets()
     {
         return $this->hasMany(Tweet::class)->latest();
     }
 
+    
     public function path($append = '')
     {
         $path = route('profile', $this); 

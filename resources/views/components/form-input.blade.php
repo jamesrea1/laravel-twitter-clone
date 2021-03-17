@@ -23,7 +23,7 @@
     >
 
     @error($attributes->get('name'))
-        <span class="ml-2 text-sm text-red-600 font-bold" role="alert">
+        <span class="mt-1 text-sm text-red-600 font-bold" role="alert">
             {{ $message }}
         </span>
     @enderror     
