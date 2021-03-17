@@ -12,7 +12,7 @@
             <div class="flex align-middle">
                 
                 @can('edit', $user)
-                    <a href="{{ $user->path('edit') }}" class="rounded-full text-black border py-2 px-6 text-xs ">Edit Profile</a>
+                    <a href="{{ $user->path('edit') }}" class="rounded-full text-black border py-2 px-6 text-sm tracking-wide ">Edit Profile</a>
                 @endcan
             
                 <x-follow-button :user="$user" />
