@@ -51,7 +51,7 @@
                     accept="image/*"
                     class=''
                 >
-                <img src="{{ $user->avatar }}" alt="Avatar" class="w-16 h-16 rounded-none object-cover">
+                <img src="{{ $user->avatar }}" alt="{{ $user->username }}" class="w-16 h-16 rounded-none object-cover">
             </div>
                         
             @error('avatar')
@@ -79,7 +79,7 @@
             id="password"
             type="password" 
             required 
-            autocomplete="off"
+            autocomplete="current-password"
             :has-error="$errors->has('password')"
             class="" 
 

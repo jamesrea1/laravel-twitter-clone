@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function (){
     Route::patch('/profiles/{user:username}', [App\Http\Controllers\ProfilesController::class, 'update'])
         ->middleware("can:edit,user");
 
+    Route::get('/explore', App\Http\Controllers\ExploreController::class);  // invokable
 });
 
 Route::get('/profiles/{user:username}', [App\Http\Controllers\ProfilesController::class, 'show'])

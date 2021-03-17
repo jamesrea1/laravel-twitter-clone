@@ -16,7 +16,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 </head>
-<body>
+<body class="min-h-screen">
     <div id="app" class="text-black">
         <header class="container mx-auto px-8 py-8">
             <a href="/" class="">

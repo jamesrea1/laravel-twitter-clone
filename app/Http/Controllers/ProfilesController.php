@@ -11,7 +11,8 @@ class ProfilesController extends Controller
     public function show(User $user)
     {
         return view('profiles.show')
-            ->with(compact('user'));
+            ->with(compact('user'))
+            ->with(['tweets' => $user->tweets()->paginate(3)]);
     }
 
     public function edit(User $user)

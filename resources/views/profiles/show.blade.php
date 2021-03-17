@@ -2,7 +2,7 @@
     <header class="mb-10">
         <div class="relative mb-3">
             <img src="/images/default-profile-banner.jpg" alt="Profile banner" class="w-full">
-            <img src="{{ $user->avatar }}" class="rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2" alt="Avatar" width="150" height="150">
+            <img src="{{ $user->avatar }}" class="rounded-full absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2" alt="{{ $user->username }}" width="150" height="150">
         </div>
         <div class="flex justify-between align-middle items-center mb-8">
             <div>
@@ -27,7 +27,7 @@
     </header>
 
     @include ('_timeline', [
-        'tweets' => $user->tweets
+        'tweets' => $tweets
     ])
 
 </x-app>

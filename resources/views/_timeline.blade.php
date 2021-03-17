@@ -5,3 +5,4 @@
         <p class="my-4 mx-6">No tweets yet!</p>    
     @endforelse
 </div>
+<div class="mt-4">{{ $tweets->links() }}</div>

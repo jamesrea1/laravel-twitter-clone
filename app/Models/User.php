@@ -46,13 +46,13 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($value) 
     { 
-            $this->attributes['password'] = bcrypt($value); 
+        $this->attributes['password'] = bcrypt($value); 
     }
 
 
     public function getAvatarAttribute($value)
     {
-        return asset("storage/{$value}");
+        return asset($value ? "storage/{$value}" : "images/default-avatar.jpg");
     }
 
 
