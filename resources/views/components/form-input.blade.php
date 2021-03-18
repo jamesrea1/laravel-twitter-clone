@@ -16,9 +16,9 @@
     <input value="{{ old($attributes->get('name')) ?? $value }}"
         {{ 
             $attributes->class([
-                'border-red-600 focus:outline-none focus:ring-1 focus:ring-red-600' => $hasError,
-                'border-bluegray-400  focus:outline-none focus:ring-1 focus:ring-bluegray-400' => !$hasError
-            ])->merge(['class' => 'border rounded px-3 py-2'])
+                'border-red-600 focus:ring-red-600' => $hasError,
+                'border-bluegray-400 focus:ring-bluegray-400' => !$hasError
+            ])->merge(['class' => 'border rounded px-3 py-2 focus:outline-none focus:ring-1'])
         }}
     >
 

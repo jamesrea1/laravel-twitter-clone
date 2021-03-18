@@ -12,7 +12,7 @@ class TweetsController extends Controller
         $tweets = current_user()->timeline();
 
         return view('tweets.index', [
-            'tweets' => $tweets
+            'tweets' => $tweets 
         ]);
     }
 

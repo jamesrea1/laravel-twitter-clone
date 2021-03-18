@@ -36,10 +36,10 @@
                 Avatar
             </label>
     
-            <div class="flex items-center justify-between pl-3  border rounded {{
+            <div class="flex items-center justify-between pl-3 border rounded focus-within:outline-none focus-within:ring-1 {{
                     $errors->has('avatar') ?
-                    'border-red-600 focus:outline-none focus:ring-1 focus:ring-red-600' :
-                    'border-bluegray-400  focus:outline-none focus:ring-1 focus:ring-bluegray-400'
+                    'border-red-600 focus-within:ring-red-600' :
+                    'border-bluegray-400 focus-within:ring-bluegray-400'
                 }}"
             >
                 <input
@@ -49,7 +49,7 @@
                     type="file"
                     autocomplete="off"
                     accept="image/*"
-                    class=''
+                    class='focus:outline-none'
                 >
                 <img src="{{ $user->avatar }}" alt="{{ $user->username }}" class="w-16 h-16 rounded-none object-cover">
             </div>
@@ -100,10 +100,16 @@
         />
         
         <button type="submit" 
-                class="bg-twitter text-white rounded-lg shadow px-4 py-2 mt-3 " 
+                class="bg-twitter text-white rounded-lg shadow px-4 py-2 mt-3 hover:opacity-80 focus:outline-none focus:ring-2 ring-bluegray-700" 
         >
             Submit
         </button> 
+    
+        <a href="{{ $user->path() }}"
+                class="bg-white border rounded-lg px-4 py-2 mt-3 ml-2 hover:bg-gray-100 focus:outline-none focus:ring-2 ring-bluegray-700" 
+        >
+            Cancel
+        </a> 
     
     </form>
 </x-app>
