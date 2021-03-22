@@ -12,7 +12,7 @@ class ProfilesController extends Controller
     {
         return view('profiles.show')
             ->with(compact('user'))
-            ->with(['tweets' => $user->tweets()->paginate(3)]);
+            ->with(['tweets' => $user->tweets()->withLikes()->paginate(3)]);
     }
 
     public function edit(User $user)

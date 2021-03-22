@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tweet extends Model
 {
-    use HasFactory;
+    use HasFactory, Likeable;
     
     protected $guarded = [];
 
@@ -15,4 +15,5 @@ class Tweet extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 }

@@ -26,7 +26,9 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function (){
     Route::get('/tweets', [App\Http\Controllers\TweetsController::class, 'index'])->name('home');
     Route::post('/tweets', [App\Http\Controllers\TweetsController::class, 'store']);
-
+    
+    Route::post('/tweets/{tweet}/like', [App\Http\Controllers\TweetLikesController::class, 'store']);
+    
     Route::post('/profiles/{user:username}/follow', [App\Http\Controllers\FollowsController::class, 'store']);
     
     Route::get('/profiles/{user:username}/edit', [App\Http\Controllers\ProfilesController::class, 'edit'])
@@ -35,6 +37,7 @@ Route::middleware('auth')->group(function (){
         ->middleware("can:edit,user");
 
     Route::get('/explore', App\Http\Controllers\ExploreController::class);  // invokable
+
 });
 
 Route::get('/profiles/{user:username}', [App\Http\Controllers\ProfilesController::class, 'show'])
