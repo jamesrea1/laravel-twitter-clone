@@ -1,3 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Using postcss importer so need to @ import tailwind  */
+
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+@import "./components/components-dir.css";
+
+@import "tailwindcss/utilities";

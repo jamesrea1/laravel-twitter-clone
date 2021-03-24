@@ -1,10 +1,35 @@
 <x-master>
     <main class="flex">
-        <div class="mx-auto pt-8 pb-8 px-9 rounded-xl bg-gray-200" style="min-width:24rem;">
+        <div class="mx-auto pt-8 pb-8 px-9 rounded-xl 
+            {{-- bg-gray-200 --}}
+            " style="min-width:24rem;">
+            
             <h1 class="text-3xl mb-8">Login</h1>
+            
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <div class="mb-4">
+
+          
+
+                <x-form-input-floating 
+                    id="username_"
+                    name="username_"
+                    label="User Name"
+                    placeholder="User Name"
+                    type="text"
+                    value="" 
+                />
+                <x-form-input-floating 
+                    id="name_"
+                    name="name_"
+                    label="Name"
+                    placeholder="Name"
+                    type="text"
+                    value="" 
+                />
+
+
+                <div class="mb-4   mt-20">
                     <label for="email" class="text-xs text-gray-600 font-bold uppercase block b-2">            
                         Email
                     </label>
@@ -21,6 +46,7 @@
                                value="{{ old('email') }}"
                                autocomplete="email"
                                autofocus
+                               placeholder=" "
                         >
                         @error('email')
                             <p class="ml-0 mt-1 text-sm text-red-600" role="alert">
