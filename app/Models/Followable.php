@@ -33,5 +33,13 @@ trait Followable
         return $this->follows()->toggle($user);
     }
 
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 
+                'follows',
+                'following_user_id',
+                'user_id')
+                ->withTimestamps();
+    }
 
 }

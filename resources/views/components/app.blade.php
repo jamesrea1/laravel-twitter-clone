@@ -1,21 +1,26 @@
 <x-master>
-    <main class="container mx-auto px-8">
-        <div class="flex justify-between">
-            <section class="">
-                @auth
-                    @include('partials/_sidebar-links')
-                @endauth
-            </section>
-            
-            <section class="flex-grow mx-20 mb-20">
-                {{ $slot }}
-            </section>
-            
-            <section class="flex-shrink-0 w-1/6">
-                @auth
-                    @include('partials/_friends-list')
-                @endauth
-            </section>
-        </div>
-    </main>
+    <div id="app" class="flex">
+        {{-- text-black --}}
+        
+        <header class="flex flex-col items-end [ flex-grow ]">
+            <x-app-header>
+
+            </x-app-header>
+        </header>
+        <main class="flex flex-col items-start  [ flex-grow ]">
+            <div class="flex" style="width:990px;">
+                <section class="flex-grow">
+                    {{ $slot }}
+                </section>
+                <section class="flex-grow">
+                    <x-app-sidebar>
+
+                    </x-app-sidebar>
+                </section>
+            </div>
+        </main>
+
+
+
+    </div>
 </x-master>

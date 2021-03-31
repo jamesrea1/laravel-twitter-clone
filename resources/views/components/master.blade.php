@@ -17,14 +17,6 @@
 
 </head>
 <body class="min-h-screen">
-    <div id="app" class="text-black">
-        <header class="container mx-auto px-8 py-8">
-            <a href="/" class="">
-                <img src="{{ asset('images/logo.svg') }}" alt="Logo" >
-            </a>
-        </header>
-
-        {{ $slot }}
-    </div>
+    {{ $slot }}
 </body>
 </html>

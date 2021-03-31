@@ -41,7 +41,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      // ringColor: ['group-focus'],
+      // ringOpacity: ['group-focus'],
+      // ringWidth: ['group-focus']
+    },
   },
   plugins: [],
 }
