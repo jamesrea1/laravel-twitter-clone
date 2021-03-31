@@ -26,7 +26,7 @@
         </p>
     </header>
 
-    @include ('_timeline', [
+    @include ('partials/_timeline', [
         'tweets' => $tweets
     ])
 

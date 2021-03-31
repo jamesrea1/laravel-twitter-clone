@@ -27,7 +27,7 @@
             </div>
             <div class="mt-8 mx-auto grid grid-cols-2 gap-3 justify-items-stretch">
                 @auth
-                    <a href="{{ url('/tweets') }}" class="block text-center rounded bg-blue-400 text-white shadow px-4 py-1.5">Home</a>
+                    <a href="{{ route('home') }}" class="block text-center rounded bg-blue-400 text-white shadow px-4 py-1.5">Home</a>
                     <form action="{{ route('logout') }}" method="POST" class="">
                         @csrf
                         <button class="block w-full text-center rounded bg-red-400 text-white shadow px-4 py-1.5">Logout</button>

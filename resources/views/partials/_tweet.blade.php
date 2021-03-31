@@ -20,7 +20,7 @@
             {{ $tweet->body }}
         </p>
         <div class="mt-4 -ml-1.5 flex items-center justify-start">
-            <form action="/tweets/{{ $tweet->id }}/like" method="POST">
+            <form action="/tweets/{{ $tweet->id }}/likes" method="POST">
                 <div class="{{ $tweet->isLikedBy(current_user())? 'text-twitter' : 'text-bluegray-400' }} "> 
                     @csrf
                     <input type="hidden" name="liked" value="1" required>
@@ -32,7 +32,7 @@
                     </button>
                 </div>
             </form>
-            <form action="/tweets/{{ $tweet->id }}/like" method="POST">
+            <form action="/tweets/{{ $tweet->id }}/likes" method="POST">
                 <div class="ml-4 {{ $tweet->isDislikedBy(current_user())? 'text-twitter' : 'text-bluegray-400' }} ">
                     @csrf
                     <input type="hidden" name="liked" value="0" required>

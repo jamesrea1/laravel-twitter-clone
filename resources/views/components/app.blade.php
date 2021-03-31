@@ -3,7 +3,7 @@
         <div class="flex justify-between">
             <section class="">
                 @auth
-                    @include('_sidebar-links')
+                    @include('partials/_sidebar-links')
                 @endauth
             </section>
             
@@ -13,7 +13,7 @@
             
             <section class="flex-shrink-0 w-1/6">
                 @auth
-                    @include('_friends-list')
+                    @include('partials/_friends-list')
                 @endauth
             </section>
         </div>

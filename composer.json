@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "jamesrea1/laravel-twitter-clone",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Twitter clone.",
     "keywords": [
         "framework",
         "laravel"
