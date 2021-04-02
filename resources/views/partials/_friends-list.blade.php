@@ -1,4 +1,4 @@
-<div class="bg-bluegray-100 rounded-xl py-6 px-6">
+<div class="bg-bluegray-100 rounded-xl py-6 px-6 mt-2">
     <h3 class="text-xl mb-5 font-bold">Following</h3>
     <ul>
         @forelse(current_user()->follows as $user )

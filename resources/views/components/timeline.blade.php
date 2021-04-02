@@ -1,4 +1,8 @@
-<div class="border border-gray-300 rounded-xl [ divide-y divide-gray-300 ]">
+@props([
+    'tweets', 
+])
+
+<div class="[ divide-y divide-gray-300 ]">
     @forelse ($tweets as $tweet)
         @include('partials/_tweet')
     @empty
