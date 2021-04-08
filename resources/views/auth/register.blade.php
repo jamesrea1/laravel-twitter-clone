@@ -1,4 +1,4 @@
-<x-master>
+<x-layout.master>
     <main class="flex">
         <div class="mx-auto pt-8 pb-8 px-9 rounded-xl bg-gray-200" style="min-width:24rem;">
             <h1 class="text-3xl mb-8">Register</h1>

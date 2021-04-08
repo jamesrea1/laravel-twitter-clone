@@ -1,4 +1,4 @@
-<x-master>
+<x-layout.master>
     <main class="flex">
         <div class="mx-auto pt-8 pb-8 px-9 rounded-xl 
             {{-- bg-gray-200 --}}
@@ -120,4 +120,4 @@
             </form>
         </div>
     </main>
-</x-master>
+</x-layout.master>

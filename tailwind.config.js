@@ -9,6 +9,8 @@ module.exports = {
       current: 'currentColor',
 
       twitter: '#1DA1F2',
+      // twitter: '#E72F82',
+
       
       black: colors.black,
       white: colors.white,
@@ -37,6 +39,9 @@ module.exports = {
         '3/6': '50%',
         '4/6': '66.666667%',
         '5/6': '83.333333%'  
+      },
+      fontSize: {
+        base: ['0.9375rem', { lineHeight: '1.25rem' }]
       }
     },
   },

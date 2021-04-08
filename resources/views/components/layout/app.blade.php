@@ -1,5 +1,5 @@
 <x-layout.master>
-    <div id="app" class="flex text-black">
+    <div id="app" class="flex text-bluegray-900 text-base">
         <header class="flex flex-col items-end [ flex-grow ]">
             <x-layout.header />
         </header>

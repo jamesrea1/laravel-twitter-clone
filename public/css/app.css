@@ -832,6 +832,17 @@ video {
   white-space: pre-wrap;
   /* Hidden from view, clicks, and screen readers */
   visibility: hidden;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 
 .grow-wrap > textarea {
@@ -839,7 +850,6 @@ video {
   resize: none;
   /* Firefox shows scrollbar on growth, you can hide like this. */
   overflow: hidden;
-  white-space: pre-wrap;
 }
 
 .grow-wrap > textarea,
@@ -11267,8 +11277,8 @@ video {
 }
 
 .text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
 }
 
 .text-lg {
@@ -43299,8 +43309,8 @@ video {
   }
 
   .sm\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   }
 
   .sm\:text-lg {
@@ -75253,8 +75263,8 @@ video {
   }
 
   .md\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   }
 
   .md\:text-lg {
@@ -107207,8 +107217,8 @@ video {
   }
 
   .lg\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   }
 
   .lg\:text-lg {
@@ -139161,8 +139171,8 @@ video {
   }
 
   .xl\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   }
 
   .xl\:text-lg {
@@ -171115,8 +171125,8 @@ video {
   }
 
   .\32xl\:text-base {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   }
 
   .\32xl\:text-lg {
