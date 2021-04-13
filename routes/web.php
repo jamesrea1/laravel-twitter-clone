@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function (){
     
     /* likes */
     Route::post('/tweets/{tweet}/likes', [App\Http\Controllers\TweetLikesController::class, 'store']);
+    Route::delete('/tweets/{tweet}/likes', [App\Http\Controllers\TweetLikesController::class, 'destroy']);
     
 
     /* profiles */

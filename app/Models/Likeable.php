@@ -67,10 +67,15 @@ trait Likeable
         );
     }
 
-    public function dislike(User $user)
+    public function unLike(User $user)
     {
-        $this->like($user, false);
+        $this->likes($user)->delete();
     }
+
+    // public function dislike(User $user)
+    // {
+    //     $this->like($user, false);
+    // }
 
 
     public function isLikedBy(User $user)
@@ -84,13 +89,13 @@ trait Likeable
             ->count();
     }
     
-    public function isDislikedBy(User $user)
-    {
-        return (bool) $user->likes
-            ->where('tweet_id', $this->id)
-            ->where('liked', false)
-            ->count();
-    }
+    // public function isDislikedBy(User $user)
+    // {
+    //     return (bool) $user->likes
+    //         ->where('tweet_id', $this->id)
+    //         ->where('liked', false)
+    //         ->count();
+    // }
 
 
 

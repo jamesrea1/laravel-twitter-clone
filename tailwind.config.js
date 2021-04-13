@@ -9,6 +9,7 @@ module.exports = {
       current: 'currentColor',
 
       twitter: '#1DA1F2',
+      twrose: '#e0245e',
       // twitter: '#E72F82',
 
       
