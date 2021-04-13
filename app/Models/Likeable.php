@@ -13,7 +13,6 @@ trait Likeable
         return $this->hasMany(Like::class);
     }
 
-
     public function scopeWithLikes(Builder $query)
     {
         // SELECT *
@@ -54,7 +53,6 @@ trait Likeable
 
     }
     
-
     public function like(User $user = null, $liked = true)
     {
         $this->likes()->updateOrCreate(
@@ -72,31 +70,17 @@ trait Likeable
         $this->likes($user)->delete();
     }
 
-    // public function dislike(User $user)
-    // {
-    //     $this->like($user, false);
-    // }
-
-
-    public function isLikedBy(User $user)
+    public function getLikeBy(User $user)
     {
         // N+1 problem: return $this->likes()->where('user_id', $user->id)->exists();  
         
         // Get dynamic property loaded on user
-        return (bool) $user->likes
+        return $user->likes
             ->where('tweet_id', $this->id)
             ->where('liked', true)
-            ->count();
+            ->pluck('id')
+            ->first();
+            
     }
     
-    // public function isDislikedBy(User $user)
-    // {
-    //     return (bool) $user->likes
-    //         ->where('tweet_id', $this->id)
-    //         ->where('liked', false)
-    //         ->count();
-    // }
-
-
-
 }

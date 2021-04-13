@@ -13,7 +13,15 @@ trait Followable
                 ->withTimestamps();
     }
 
-    public function following(User $user)
+    // public function whoToFollow()
+    // {
+    //     $friends = $this->follows()->pluck('id');
+
+        
+    //     User::where()
+    // }
+
+    public function isFollowing(User $user)
     {
         return $this->follows()->where('id', $user->id)->exists();
     }

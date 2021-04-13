@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -43,6 +44,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+
+    public function scopeWhoToFollow(Builder $query)
+    {
+        $following = current_user()->follows()->pluck('id'); 
+
+        $query = $query->whereNotIn('id', $following)
+                       ->where('id', '!=', current_user()->id)
+                       ->inRandomOrder()
+                       ->limit('3');
+    }
 
     public function setPasswordAttribute($value) 
     { 
