@@ -92,12 +92,12 @@ tweet.addEventListener('input', (e)=>{
     if(chars > 0 && chars <= 280){
         submit.disabled = false;
         submit.classList.remove('bg-opacity-40', 'cursor-default')
-        submit.classList.add('hover:bg-opacity-80', 'shadow')
+        submit.classList.add('hover:bg-twdarkblue', 'shadow')
     }
     else{
         submit.disabled = true;
         submit.classList.add('bg-opacity-40', 'cursor-default')
-        submit.classList.remove('hover:bg-opacity-80', 'shadow')
+        submit.classList.remove('hover:bg-twdarkblue', 'shadow')
 
     }
 

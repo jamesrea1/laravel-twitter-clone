@@ -1,1 +1,0 @@
-<div class="h-2.5 border-b border-gray-200 bg-bluegray-50"></div>

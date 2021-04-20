@@ -1,10 +1,14 @@
 <x-layout.app>
     {{-- main content --}}
-    <x-blocks.content-header>
+    <x-shared.content-header>
         Home
-    </x-blocks.content-header>
-    <x-blocks.publish-tweet-panel />
-    <x-blocks.content-seperator />
+    </x-shared.content-header>
+    
+    <div class="hidden sm:block">
+        <x-shared.publish-tweet-panel />
+        <x-shared.content-seperator />
+    </div>
+
     <x-home.timeline :tweets="$tweets" />
     
     {{-- main sidebar --}}

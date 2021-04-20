@@ -4,12 +4,25 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    screens: {
+      sm: '500px',
+      sm2: '620px',
+      md: '1030px',
+      md2: '1100px',
+      lg: '1287px',
+      '2xl': '1536px',
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
 
       twitter: '#1DA1F2',
+      twdarkblue: '#1A91DA',
+      twlightblue: '#E8F5FE',
       twrose: '#e0245e',
+      twinput: '#EBEEF0',
+      twgray150: '#EFF1F2',
+      
       // twitter: '#E72F82',
 
       
@@ -24,6 +37,11 @@ module.exports = {
       lightblue: colors.lightBlue
     },
     extend: {
+      width : {
+        12.5: '3.125rem',
+        22: '5.5rem',
+        68 : '17.1875rem'
+      },
       spacing: {
         '1/2': '50%',
         '1/3': '33.333333%',
@@ -48,6 +66,8 @@ module.exports = {
   },
   variants: {
     extend: {
+      brightness: ['hover']
+
       // ringColor: ['group-focus'],
       // ringOpacity: ['group-focus'],
       // ringWidth: ['group-focus']
