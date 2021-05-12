@@ -26,6 +26,14 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group(function (){
     
+    /* ajax */
+    Route::prefix('api')->group(function () {
+    
+        Route::post('/likes', [App\Http\Controllers\Api\LikesController::class, 'store']);
+        Route::delete('/likes/{id}', [App\Http\Controllers\Api\LikesController::class, 'destroy']);
+    });
+    
+
     /* home */
     Route::get('/home', App\Http\Controllers\HomeController::class)  // invokable
         ->name('home');

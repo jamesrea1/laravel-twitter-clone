@@ -2140,6 +2140,216 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 autosize__WEBPACK_IMPORTED_MODULE_0___default()(document.querySelector('#composeTweetBody'));
+
+/***/ }),
+
+/***/ "./resources/js/bootstrap.js":
+/*!***********************************!*\
+  !*** ./resources/js/bootstrap.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/**
+ * We'll load the axios HTTP library which allows us to easily issue requests
+ * to our Laravel back-end. This library automatically handles sending the
+ * CSRF token as a header based on the value of the "XSRF" token cookie.
+ */
+
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+/**
+ * Echo exposes an expressive API for subscribing to channels and listening
+ * for events that are broadcast by Laravel. Echo and event broadcasting
+ * allows your team to easily build robust real-time web applications.
+ */
+// import Echo from 'laravel-echo';
+// window.Pusher = require('pusher-js');
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     forceTLS: true
+// });
+
+/***/ }),
+
+/***/ "./resources/js/tweet-like.js":
+/*!************************************!*\
+  !*** ./resources/js/tweet-like.js ***!
+  \************************************/
+/***/ (() => {
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+// Tweet like/unlike ajax
+var buttons = document.querySelectorAll(".js-tweetLikeBtn");
+
+var _iterator = _createForOfIteratorHelper(buttons),
+    _step;
+
+try {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
+    var button = _step.value;
+    button.addEventListener('click', function (e) {
+      if (this.dataset.likeId) {
+        unLike.call(this);
+      } else {
+        like.call(this);
+      }
+    });
+  }
+} catch (err) {
+  _iterator.e(err);
+} finally {
+  _iterator.f();
+}
+
+function like() {
+  var _this = this;
+
+  var tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
+  axios.post('/api/likes', {
+    "data": {
+      "type": "like",
+      "attributes": {
+        "tweetId": tweetId
+      }
+    }
+  }).then(function (response) {
+    // response obj:
+    // {
+    //     "success": true,
+    //     "data": [
+    //         { 
+    //             "type": "tweet",
+    //             "id": 63,
+    //             "attributes": 
+    //             {
+    //                 "likes": 1
+    //             }
+    //         },
+    //         {
+    //             "type": "like",
+    //             "id": 74,
+    //             "attributes": []
+    //         }
+    //     ]
+    // }
+    // extract objs from response
+    var extractData = function extractData(data, type) {
+      return data.find(function (el) {
+        return el.type == type;
+      });
+    };
+
+    var tweet = extractData(response.data.data, 'tweet');
+    var like = extractData(response.data.data, 'like'); // check extracted data
+
+    if (!(tweet && like)) {
+      return Promise.reject(new Error("Could not extract response data."));
+    } // store the like - we have a 'like' instance, so store the liked state in the data attribute
+
+
+    _this.dataset.likeId = like.id; // show liked colour
+
+    _this.classList.add('text-twrose');
+
+    _this.classList.remove('text-bluegray-500'); // show liked icon
+
+
+    var likedIcon = _this.querySelector('.js-liked');
+
+    var notLikedIcon = _this.querySelector('.js-notLiked');
+
+    likedIcon.classList.remove('hidden');
+    notLikedIcon.classList.add('hidden'); // update like count
+
+    var likes = _this.querySelector('.js-likes');
+
+    likes.textContent = tweet.attributes.likes;
+  })["catch"](function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log('Error', error.message);
+    }
+  });
+}
+
+function unLike() {
+  var _this2 = this;
+
+  var likeId = this.dataset.likeId;
+  axios.post("/api/likes/".concat(likeId), {
+    '_method': 'DELETE'
+  }).then(function (response) {
+    console.log(response); // response obj:
+    // {
+    //     "success": true,
+    //     "data": {
+    //         "type": "tweet",
+    //         "id": 62,
+    //         "attributes": {
+    //             "likes":1
+    //         }
+    //     }
+    // }
+    // extract obj from response
+
+    var tweet = response.data.data; // check extracted data
+
+    if (!tweet) {
+      return Promise.reject(new Error("Could not extract response data."));
+    } // store the like - we have deleted a 'like', so store the deleted like state in the data attribute
+
+
+    _this2.dataset.likeId = ''; // show un-liked colour
+
+    _this2.classList.add('text-bluegray-500');
+
+    _this2.classList.remove('text-twrose'); // show un-liked icon
+
+
+    var likedIcon = _this2.querySelector('.js-liked');
+
+    var notLikedIcon = _this2.querySelector('.js-notLiked');
+
+    likedIcon.classList.add('hidden');
+    notLikedIcon.classList.remove('hidden'); // update like count
+
+    var likes = _this2.querySelector('.js-likes');
+
+    likes.textContent = tweet.attributes.likes;
+  })["catch"](function (error) {
+    if (error.response) {
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      console.log(error.request);
+    } else {
+      console.log('Error', error.message);
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/tweet-progress.js":
+/*!****************************************!*\
+  !*** ./resources/js/tweet-progress.js ***!
+  \****************************************/
+/***/ (() => {
+
 var tweet = document.getElementById('composeTweetBody');
 tweet.addEventListener('input', function (e) {
   var counter = document.getElementById('composeTweetCounter');
@@ -2223,37 +2433,6 @@ tweet.addEventListener('input', function (e) {
 var form = document.getElementById('composeTweetForm');
 form.addEventListener('submit', function (event) {// submit event detected
 });
-
-/***/ }),
-
-/***/ "./resources/js/bootstrap.js":
-/*!***********************************!*\
-  !*** ./resources/js/bootstrap.js ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
-
-window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/**
- * We'll load the axios HTTP library which allows us to easily issue requests
- * to our Laravel back-end. This library automatically handles sending the
- * CSRF token as a header based on the value of the "XSRF" token cookie.
- */
-
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
-// import Echo from 'laravel-echo';
-// window.Pusher = require('pusher-js');
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-//     forceTLS: true
-// });
 
 /***/ }),
 
@@ -19785,6 +19964,8 @@ process.umask = function() { return 0; };
 /******/ 		
 /******/ 		var deferredModules = [
 /******/ 			["./resources/js/app.js"],
+/******/ 			["./resources/js/tweet-progress.js"],
+/******/ 			["./resources/js/tweet-like.js"],
 /******/ 			["./resources/css/app.css"]
 /******/ 		];
 /******/ 		// no chunk on demand loading
