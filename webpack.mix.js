@@ -11,14 +11,10 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js(["resources/js/app.js", 
-    "resources/js/tweet-progress.js",
-    "resources/js/tweet-like.js",
-    ]
-    , "public/js")
+mix.js("resources/js/app.js","public/js")
     .postCss("resources/css/app.css", "public/css", [
         require("postcss-import"),
         require("tailwindcss"),
     ])
     .browserSync('laravel-twitter-clone.test:8080/')
-    .version();
+    .version(); 

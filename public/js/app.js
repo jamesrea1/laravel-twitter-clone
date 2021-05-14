@@ -2136,10 +2136,36 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var autosize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! autosize */ "./node_modules/autosize/dist/autosize.js");
 /* harmony import */ var autosize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(autosize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tweet-progress.js */ "./resources/js/tweet-progress.js");
+/* harmony import */ var _tweet_like_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tweet-like.js */ "./resources/js/tweet-like.js");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
-autosize__WEBPACK_IMPORTED_MODULE_0___default()(document.querySelector('#composeTweetBody'));
+autosize__WEBPACK_IMPORTED_MODULE_0___default()(document.querySelector('.js-composeTweetBody'));
+
+_tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__.tweetProgress.initialise(document.querySelector('.js-publishTweetPanel'));
+
+var buttons = document.querySelectorAll(".js-tweetLikeBtn");
+
+var _iterator = _createForOfIteratorHelper(buttons),
+    _step;
+
+try {
+  for (_iterator.s(); !(_step = _iterator.n()).done;) {
+    var button = _step.value;
+    _tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLike.initialise(button);
+  }
+} catch (err) {
+  _iterator.e(err);
+} finally {
+  _iterator.f();
+}
 
 /***/ }),
 
@@ -2178,69 +2204,47 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /*!************************************!*\
   !*** ./resources/js/tweet-like.js ***!
   \************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "tweetLike": () => (/* binding */ tweetLike)
+/* harmony export */ });
+var _this = undefined;
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-// Tweet like/unlike ajax
-var buttons = document.querySelectorAll(".js-tweetLikeBtn");
-
-var _iterator = _createForOfIteratorHelper(buttons),
-    _step;
-
-try {
-  for (_iterator.s(); !(_step = _iterator.n()).done;) {
-    var button = _step.value;
-    button.addEventListener('click', function (e) {
-      if (this.dataset.likeId) {
-        unLike.call(this);
-      } else {
-        like.call(this);
+/** @module tweetLike */
+var tweetLike = {
+  initialise: function initialise(button) {
+    button.addEventListener('click', this.requestLike);
+  },
+  requestLike: function requestLike(e) {
+    var tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
+    var likeId = this.dataset.likeId;
+    var tweetIsLiked = parseInt(likeId) > 0;
+    var requestType = tweetIsLiked ? 'destroy' : 'create';
+    var endPoints = {
+      create: '/api/likes',
+      destroy: "/api/likes/".concat(likeId)
+    };
+    var payloads = {
+      create: {
+        "data": {
+          "type": "like",
+          "attributes": {
+            "tweetId": tweetId
+          }
+        }
+      },
+      destroy: {
+        '_method': 'DELETE'
       }
-    });
-  }
-} catch (err) {
-  _iterator.e(err);
-} finally {
-  _iterator.f();
-}
+    };
+    axios.post(endPoints[requestType], payloads[requestType]).then(this.updateUi)["catch"](this.handleErrors);
+  },
+  updateUi: function updateUi(response) {
+    console.log(response); // extract objs from response
 
-function like() {
-  var _this = this;
-
-  var tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
-  axios.post('/api/likes', {
-    "data": {
-      "type": "like",
-      "attributes": {
-        "tweetId": tweetId
-      }
-    }
-  }).then(function (response) {
-    // response obj:
-    // {
-    //     "success": true,
-    //     "data": [
-    //         { 
-    //             "type": "tweet",
-    //             "id": 63,
-    //             "attributes": 
-    //             {
-    //                 "likes": 1
-    //             }
-    //         },
-    //         {
-    //             "type": "like",
-    //             "id": 74,
-    //             "attributes": []
-    //         }
-    //     ]
-    // }
-    // extract objs from response
     var extractData = function extractData(data, type) {
       return data.find(function (el) {
         return el.type == type;
@@ -2250,29 +2254,37 @@ function like() {
     var tweet = extractData(response.data.data, 'tweet');
     var like = extractData(response.data.data, 'like'); // check extracted data
 
-    if (!(tweet && like)) {
-      return Promise.reject(new Error("Could not extract response data."));
-    } // store the like - we have a 'like' instance, so store the liked state in the data attribute
+    /* if(!(tweet && like)){ return Promise.reject(new Error("Could not extract response data.")); } */
+    // store the created like 
+
+    _this.dataset.likeId = like ? like.id : ''; // like created?
+
+    var action = like && response.status === 201 ? 'created' : 'destroyed';
+    var likeCreated = !!(like && response.status === 201); // show liked colour
+
+    _this.classList.add(likeCreated ? 'text-twrose' : 'text-bluegray-500');
+
+    _this.classList.remove(!likeCreated ? 'text-twrose' : 'text-bluegray-500'); // show liked icon
 
 
-    _this.dataset.likeId = like.id; // show liked colour
+    var likedIcon = _this.querySelector('.js-likedIcon');
 
-    _this.classList.add('text-twrose');
+    var likeIcon = _this.querySelector('.js-likeIcon');
 
-    _this.classList.remove('text-bluegray-500'); // show liked icon
+    if (likeCreated) {
+      likedIcon.classList.remove('hidden');
+      likeIcon.classList.add('hidden');
+    } else {
+      likeIcon.classList.remove('hidden');
+      likedIcon.classList.add('hidden');
+    } // update like count
 
-
-    var likedIcon = _this.querySelector('.js-liked');
-
-    var notLikedIcon = _this.querySelector('.js-notLiked');
-
-    likedIcon.classList.remove('hidden');
-    notLikedIcon.classList.add('hidden'); // update like count
 
     var likes = _this.querySelector('.js-likes');
 
-    likes.textContent = tweet.attributes.likes;
-  })["catch"](function (error) {
+    likes.textContent = tweet.attributes.likes || '';
+  },
+  handleErrors: function handleErrors(error) {
     if (error.response) {
       console.log(error.response.data);
       console.log(error.response.status);
@@ -2282,65 +2294,8 @@ function like() {
     } else {
       console.log('Error', error.message);
     }
-  });
-}
-
-function unLike() {
-  var _this2 = this;
-
-  var likeId = this.dataset.likeId;
-  axios.post("/api/likes/".concat(likeId), {
-    '_method': 'DELETE'
-  }).then(function (response) {
-    console.log(response); // response obj:
-    // {
-    //     "success": true,
-    //     "data": {
-    //         "type": "tweet",
-    //         "id": 62,
-    //         "attributes": {
-    //             "likes":1
-    //         }
-    //     }
-    // }
-    // extract obj from response
-
-    var tweet = response.data.data; // check extracted data
-
-    if (!tweet) {
-      return Promise.reject(new Error("Could not extract response data."));
-    } // store the like - we have deleted a 'like', so store the deleted like state in the data attribute
-
-
-    _this2.dataset.likeId = ''; // show un-liked colour
-
-    _this2.classList.add('text-bluegray-500');
-
-    _this2.classList.remove('text-twrose'); // show un-liked icon
-
-
-    var likedIcon = _this2.querySelector('.js-liked');
-
-    var notLikedIcon = _this2.querySelector('.js-notLiked');
-
-    likedIcon.classList.add('hidden');
-    notLikedIcon.classList.remove('hidden'); // update like count
-
-    var likes = _this2.querySelector('.js-likes');
-
-    likes.textContent = tweet.attributes.likes;
-  })["catch"](function (error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else if (error.request) {
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
-  });
-}
+  }
+};
 
 /***/ }),
 
@@ -2348,91 +2303,103 @@ function unLike() {
 /*!****************************************!*\
   !*** ./resources/js/tweet-progress.js ***!
   \****************************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-var tweet = document.getElementById('composeTweetBody');
-tweet.addEventListener('input', function (e) {
-  var counter = document.getElementById('composeTweetCounter');
-  var ring = counter.children[1];
-  var ringBG = counter.children[0]; // get character count
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "tweetProgress": () => (/* binding */ tweetProgress)
+/* harmony export */ });
+/** @module tweetProgress */
+var tweetProgress = {
+  initialise: function initialise(container) {
+    container.addEventListener('input', this.updateTweetProgress);
+  },
+  updateTweetProgress: function updateTweetProgress(event) {
+    // event is delegated to the container, so check event target
+    if (!event.target.matches('.js-composeTweetBody')) {
+      return;
+    }
 
-  var chars = e.target.value.length;
-  var charsRatio = chars / 280;
+    var counter = this.querySelector('.js-composeTweetCounter');
+    var ring = counter.children[1];
+    var ringBG = counter.children[0]; // get character count
 
-  if (chars === 0) {
-    counter.classList.add('hidden');
-  } else {
-    counter.classList.remove('hidden');
-  } // update svg ring status colour 
+    var chars = event.target.value.length;
+    var charsRatio = chars / 280; // show counter?
 
-
-  if (chars < 260) {
-    ring.setAttribute('stroke', '#1DA1F2');
-  } else if (chars >= 260 && chars < 280) {
-    ring.setAttribute('stroke', 'orange');
-  } else if (chars >= 280) {
-    ring.setAttribute('stroke', 'red');
-  } // show chars remaining warning
-
-
-  var remaining = 280 - chars;
-  var warning = document.getElementById('composeTweetWarning');
-
-  if (chars < 260) {
-    // hide counter warning text 
-    warning.innerHTML = ""; // ring size normal
-
-    counter.classList.remove('w-8', 'h-8');
-    counter.classList.add('w-5', 'h-5'); // ring viewbox normal
-
-    counter.setAttribute('viewBox', '0 0 20 20'); // circle radius normal
-
-    ring.setAttribute('r', '9');
-    ringBG.setAttribute('r', '9');
-  } else if (chars >= 260) {
-    // show counter warning text 
-    warning.innerHTML = remaining; // increase ring size:
-
-    counter.classList.remove('w-5', 'h-5');
-    counter.classList.add('w-8', 'h-8'); // increase ring viewbox
-
-    counter.setAttribute('viewBox', '0 0 30 30'); // increase circle radius
-
-    ring.setAttribute('r', '14');
-    ringBG.setAttribute('r', '14');
-  } // update warning text colour
+    if (chars > 0) {
+      counter.classList.remove('hidden');
+    } else {
+      counter.classList.add('hidden');
+    } // update svg ring status colour 
 
 
-  if (chars < 280) {
-    warning.classList.remove('text-red-600');
-    warning.classList.add('text-gray-500');
-  } else {
-    warning.classList.remove('text-gray-500');
-    warning.classList.add('text-red-600');
-  } // calculate offset
+    if (chars < 260) {
+      ring.setAttribute('stroke', '#1DA1F2');
+    } else if (chars >= 260 && chars < 280) {
+      ring.setAttribute('stroke', 'orange');
+    } else if (chars >= 280) {
+      ring.setAttribute('stroke', 'red');
+    } // show chars remaining warning
 
 
-  var circum = 2 * Math.PI * (ring.getBBox().width / 2);
-  var offset = circum - circum * charsRatio; // update svg ring position
+    var remaining = 280 - chars;
+    var warning = this.querySelector('.js-composeTweetWarning');
 
-  ring.setAttribute('stroke-dasharray', circum);
-  ring.setAttribute('stroke-dashoffset', Math.max(offset, 0)); // disable the submit button
+    if (chars < 260) {
+      // hide counter warning text 
+      warning.innerHTML = ""; // ring size normal
 
-  var submit = document.getElementById('composeTweetSubmit');
+      counter.classList.remove('w-8', 'h-8');
+      counter.classList.add('w-5', 'h-5'); // ring viewbox normal
 
-  if (chars > 0 && chars <= 280) {
-    submit.disabled = false;
-    submit.classList.remove('bg-opacity-40', 'cursor-default');
-    submit.classList.add('hover:bg-twdarkblue', 'shadow');
-  } else {
-    submit.disabled = true;
-    submit.classList.add('bg-opacity-40', 'cursor-default');
-    submit.classList.remove('hover:bg-twdarkblue', 'shadow');
+      counter.setAttribute('viewBox', '0 0 20 20'); // circle radius normal
+
+      ring.setAttribute('r', '9');
+      ringBG.setAttribute('r', '9');
+    } else if (chars >= 260) {
+      // show counter warning text 
+      warning.textContent = remaining; // increase ring size:
+
+      counter.classList.remove('w-5', 'h-5');
+      counter.classList.add('w-8', 'h-8'); // increase ring viewbox
+
+      counter.setAttribute('viewBox', '0 0 30 30'); // increase circle radius
+
+      ring.setAttribute('r', '14');
+      ringBG.setAttribute('r', '14');
+    } // update warning text colour
+
+
+    if (chars < 280) {
+      warning.classList.remove('text-red-600');
+      warning.classList.add('text-gray-500');
+    } else {
+      warning.classList.remove('text-gray-500');
+      warning.classList.add('text-red-600');
+    } // calculate offset
+
+
+    var circum = 2 * Math.PI * (ring.getBBox().width / 2);
+    var offset = circum - circum * charsRatio; // update svg ring position
+
+    ring.setAttribute('stroke-dasharray', circum);
+    ring.setAttribute('stroke-dashoffset', Math.max(offset, 0)); // enable the submit button?
+
+    var submit = this.querySelector('.js-composeTweetSubmit');
+
+    if (chars > 0 && chars <= 280) {
+      submit.disabled = false;
+      submit.classList.remove('bg-opacity-40', 'cursor-default');
+      submit.classList.add('hover:bg-twdarkblue', 'shadow');
+    } else {
+      submit.disabled = true;
+      submit.classList.add('bg-opacity-40', 'cursor-default');
+      submit.classList.remove('hover:bg-twdarkblue', 'shadow');
+    }
   }
-});
-var form = document.getElementById('composeTweetForm');
-form.addEventListener('submit', function (event) {// submit event detected
-});
+};
 
 /***/ }),
 
@@ -19964,8 +19931,6 @@ process.umask = function() { return 0; };
 /******/ 		
 /******/ 		var deferredModules = [
 /******/ 			["./resources/js/app.js"],
-/******/ 			["./resources/js/tweet-progress.js"],
-/******/ 			["./resources/js/tweet-like.js"],
 /******/ 			["./resources/css/app.css"]
 /******/ 		];
 /******/ 		// no chunk on demand loading

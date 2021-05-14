@@ -1,4 +1,4 @@
-<div class="px-4 py-2 border-b border-gray-200">
+<div class="js-publishTweetPanel px-4 py-2 border-b border-gray-200">
     <form action="{{ url('tweets') }}" method="POST" id="composeTweetForm">
         @csrf
         <div class="flex">
@@ -11,8 +11,7 @@
                 <div class="py-3">
                     <textarea
                         name="body" 
-                        id="composeTweetBody" 
-                        class="focus:outline-none text-xl w-full resize-none pb-2"
+                        class="js-composeTweetBody focus:outline-none text-xl w-full resize-none pb-2"
                         rows="1" 
                         autocomplete="off"
                         placeholder="What's happening?"
@@ -40,7 +39,7 @@
                         </a>
                     </div>
                     <div class="w-8 h-8 ml-auto mr-4 relative flex items-center justify-center">
-                        <svg id="composeTweetCounter" height="100%" width="100%" class="w-5 h-5 hidden" viewBox="0 0 20 20" style="overflow: visible; transform: rotate(-90deg); transition: width 150ms, height 150ms;">
+                        <svg class="js-composeTweetCounter w-5 h-5 hidden" height="100%" width="100%" viewBox="0 0 20 20" style="overflow: visible; transform: rotate(-90deg); transition: width 150ms, height 150ms;">
                             <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#EBEEF0"></circle>
                             <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#1DA1F2"
                                     stroke-linecap="round"
@@ -49,13 +48,12 @@
                             ></circle>
                         </svg>
                         <div class="absolute inset-0 items-center justify-center flex">
-                            <span id="composeTweetWarning" class="text-xs text-gray-500"></span>
+                            <span class="js-composeTweetWarning text-xs text-gray-500"></span>
                         </div>
                     </div>
                     <div>
-                        <button id="composeTweetSubmit" 
-                            type="submit" 
-                            class="block py-2.5 px-4 rounded-full text-white font-bold bg-twitter transition-colors duration-200
+                        <button type="submit" 
+                            class="js-composeTweetSubmit block py-2.5 px-4 rounded-full text-white font-bold bg-twitter transition-colors duration-200
                                 bg-opacity-40 cursor-default" 
                             disabled 
                         >

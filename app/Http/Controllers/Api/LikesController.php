@@ -30,7 +30,7 @@ class LikesController extends Controller
                         'attributes' => []
                     ]
                 ]
-            ], 200);
+            ], 201);
         }
         catch (\Exception $e) 
         {
@@ -54,11 +54,13 @@ class LikesController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'type' => 'tweet',
-                    'id' => $tweet->id,
-                    'attributes' => ['likes' => $likes]
+                    [
+                        'type' => 'tweet',
+                        'id' => $tweet->id,
+                        'attributes' => ['likes' => $likes]
+                    ],
                 ]
-            ], 201);    
+            ], 200);    
         }
         catch (\Exception $e) 
         {

@@ -1,55 +1,50 @@
-// Tweet like/unlike ajax
+/** @module tweetLike */
 
-const buttons = document.querySelectorAll(".js-tweetLikeBtn");
+export const tweetLike = 
+{    
+    initialise: function(button) {
+        button.addEventListener('click', this.requestLike);
+    },
+    requestLike: function(e) {    
+        const tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
+        const likeId = this.dataset.likeId;
 
-for (const button of buttons) {
-    button.addEventListener('click', function(e) {
-    
-        if(this.dataset.likeId){
-            unLike.call(this);
+        const tweetIsLiked = (parseInt(likeId) > 0);
+        const requestType = tweetIsLiked ? 'destroy' : 'create';
+
+        const endPoints = {
+            create: '/api/likes',
+            destroy: `/api/likes/${likeId}`
         }
-        else{
-            like.call(this);
-        }
 
-  });
-}
-
-function like(){
-    
-    const tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
-    
-    axios.post('/api/likes', {
-        "data": {
-            "type": "like",
-            "attributes": {
-                "tweetId": tweetId
+        const payloads = {
+            create: {
+                "data": {
+                    "type": "like",
+                    "attributes": {
+                        "tweetId": tweetId
+                    },
+                }
             },
+            destroy: {
+                '_method': 'DELETE',
+            }
         }
-    })
-    .then(response => {
-
-        // response obj:
-        // {
-        //     "success": true,
-        //     "data": [
-        //         { 
-        //             "type": "tweet",
-        //             "id": 63,
-        //             "attributes": 
-        //             {
-        //                 "likes": 1
-        //             }
-        //         },
-        //         {
-        //             "type": "like",
-        //             "id": 74,
-        //             "attributes": []
-        //         }
-        //     ]
-        // }
-
-                
+        
+        axios.post(
+            endPoints[requestType], 
+            payloads[requestType]
+        )    
+        .then(
+            this.updateUi
+        )
+        .catch(
+            this.handleErrors
+        );
+    },
+    updateUi: (response) => {
+        console.log(response); 
+            
         // extract objs from response
         const extractData = (data, type) => (
             data.find(el => el.type == type) 
@@ -58,29 +53,36 @@ function like(){
         const like = extractData(response.data.data, 'like');
         
         // check extracted data
-        if(!(tweet && like)){
-            return Promise.reject(new Error("Could not extract response data.")); 
-        }
+        /* if(!(tweet && like)){ return Promise.reject(new Error("Could not extract response data.")); } */
 
-        // store the like - we have a 'like' instance, so store the liked state in the data attribute
-        this.dataset.likeId = like.id;
+        // store the created like 
+        this.dataset.likeId = like? like.id : '';
+
+        // like created?
+        const action = (like && response.status === 201)? 'created' : 'destroyed';
+        const likeCreated = !!(like && response.status === 201);
 
         // show liked colour
-        this.classList.add('text-twrose');
-        this.classList.remove('text-bluegray-500');
-        
+        this.classList.add((likeCreated)? 'text-twrose' : 'text-bluegray-500');
+        this.classList.remove((!likeCreated)? 'text-twrose' : 'text-bluegray-500');
+
         // show liked icon
-        const likedIcon = this.querySelector('.js-liked');
-        const notLikedIcon = this.querySelector('.js-notLiked');
-        likedIcon.classList.remove('hidden');
-        notLikedIcon.classList.add('hidden');
-        
+        const likedIcon = this.querySelector('.js-likedIcon');
+        const likeIcon = this.querySelector('.js-likeIcon');
+        if(likeCreated){
+            likedIcon.classList.remove('hidden');
+            likeIcon.classList.add('hidden');
+        }else{
+            likeIcon.classList.remove('hidden');
+            likedIcon.classList.add('hidden');
+        }
+
         // update like count
         const likes = this.querySelector('.js-likes');
-        likes.textContent = tweet.attributes.likes;
+        likes.textContent = tweet.attributes.likes || '';
 
-    })
-    .catch(error => {
+    },
+    handleErrors: (error) => {
         if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);
@@ -90,65 +92,18 @@ function like(){
         } else {
             console.log('Error', error.message);
         }
-    });
+    }
+
+
+
+
+
+
+
+
 }
 
-function unLike(){
-    const likeId = this.dataset.likeId;
-        
-    axios.post(`/api/likes/${likeId}`, {
-        '_method': 'DELETE',
-    }) 
-    .then(response => {
-        console.log(response);
 
-        // response obj:
-        // {
-        //     "success": true,
-        //     "data": {
-        //         "type": "tweet",
-        //         "id": 62,
-        //         "attributes": {
-        //             "likes":1
-        //         }
-        //     }
-        // }
 
-        // extract obj from response
-        const tweet = response.data.data;
-        
-        // check extracted data
-        if(!tweet){
-            return Promise.reject(new Error("Could not extract response data.")); 
-        }
 
-        // store the like - we have deleted a 'like', so store the deleted like state in the data attribute
-        this.dataset.likeId = '';
 
-        // show un-liked colour
-        this.classList.add('text-bluegray-500');
-        this.classList.remove('text-twrose');
-        
-        // show un-liked icon
-        const likedIcon = this.querySelector('.js-liked');
-        const notLikedIcon = this.querySelector('.js-notLiked');
-        likedIcon.classList.add('hidden');
-        notLikedIcon.classList.remove('hidden');
-        
-        // update like count
-        const likes = this.querySelector('.js-likes');
-        likes.textContent = tweet.attributes.likes;
-
-    })
-    .catch(error => {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
-        }
-    });
-}
