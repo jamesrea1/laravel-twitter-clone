@@ -1,22 +1,17 @@
 /** @module tweetLike */
 
-export const tweetLike = 
-{    
-    initialise: function(button) {
-        button.addEventListener('click', this.requestLike);
-    },
-    requestLike: function(e) {    
-        const tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
-        const likeId = this.dataset.likeId;
+export const tweetLike = (button) => {
 
-        const tweetIsLiked = (parseInt(likeId) > 0);
-        const requestType = tweetIsLiked ? 'destroy' : 'create';
+    function sendRequest(){
+        const tweetId = button.closest('[data-tweet-id]').dataset.tweetId;
+        const likeId = button.closest('[data-like-id]').dataset.likeId;
+
+        const requestType = (parseInt(likeId) > 0) ? 'destroy' : 'create';
 
         const endPoints = {
             create: '/api/likes',
             destroy: `/api/likes/${likeId}`
         }
-
         const payloads = {
             create: {
                 "data": {
@@ -31,79 +26,77 @@ export const tweetLike =
             }
         }
         
-        axios.post(
+        return axios.post(
             endPoints[requestType], 
             payloads[requestType]
-        )    
-        .then(
-            this.updateUi
-        )
-        .catch(
-            this.handleErrors
-        );
-    },
-    updateUi: (response) => {
-        console.log(response); 
-            
+        )   
+    }
+    function extractResponseData(response){
         // extract objs from response
         const extractData = (data, type) => (
             data.find(el => el.type == type) 
         );
         const tweet = extractData(response.data.data, 'tweet');
         const like = extractData(response.data.data, 'like');
-        
-        // check extracted data
-        /* if(!(tweet && like)){ return Promise.reject(new Error("Could not extract response data.")); } */
-
-        // store the created like 
-        this.dataset.likeId = like? like.id : '';
 
         // like created?
-        const action = (like && response.status === 201)? 'created' : 'destroyed';
-        const likeCreated = !!(like && response.status === 201);
+        const isLiked = !!(like && response.status === 201);
 
-        // show liked colour
-        this.classList.add((likeCreated)? 'text-twrose' : 'text-bluegray-500');
-        this.classList.remove((!likeCreated)? 'text-twrose' : 'text-bluegray-500');
+        // store like state
+        button.dataset.likeId = isLiked? like.id : '';
 
-        // show liked icon
-        const likedIcon = this.querySelector('.js-likedIcon');
-        const likeIcon = this.querySelector('.js-likeIcon');
-        if(likeCreated){
-            likedIcon.classList.remove('hidden');
-            likeIcon.classList.add('hidden');
-        }else{
-            likeIcon.classList.remove('hidden');
-            likedIcon.classList.add('hidden');
-        }
-
-        // update like count
-        const likes = this.querySelector('.js-likes');
-        likes.textContent = tweet.attributes.likes || '';
-
-    },
-    handleErrors: (error) => {
-        if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
+        return {
+            isLiked: isLiked,
+            likes: tweet.attributes.likes, test: 1
         }
     }
+    function updateUI({isLiked, likes, test}){
+        // show liked status colour
+        button.classList.add((isLiked)? 'text-twrose' : 'text-bluegray-500');
+        button.classList.remove((!isLiked)? 'text-twrose' : 'text-bluegray-500');
+        
+        // show liked status icon
+        const likeIcon = button.querySelector('.js-likeIcon');
+        const likedIcon = button.querySelector('.js-likedIcon');
+        (isLiked? likeIcon : likedIcon).classList.add('hidden');
+        (isLiked? likedIcon : likeIcon).classList.remove('hidden');
 
+        // update like count
+        button.querySelector('.js-likes').textContent = likes || '';
+    }
+    function handleError(error){
+        if (error.response) {
+            console.error("Server responded with a status code not in 200 range");
+            // server exception json, or action method error json
+            console.error(error.response.data);
+            // 4xx, 5xx
+            console.error("Response status code: ", error.response.status);
+        } else if (error.request) {
+            // no response (error.request is instance of XMLHttpRequest)
+            console.error(error.request);
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.error('Error: ', error.message);
+        }
 
-
-
-
-
-
+        // reset UI
+        const likes = button.querySelector('.js-likes').textContent;
+        const likeId = button.closest('[data-like-id]').dataset.likeId;
+        const isLiked = !!(likeId);
+        updateUI({
+            isLiked, 
+            likes
+        })
+        console.log("UI Reset");
+    }
+    function handleEvent(e){
+        sendRequest()
+        .then(extractResponseData)
+        .then(updateUI)
+        .catch(handleError)
+    }
+    button.addEventListener('click', handleEvent);
 
 }
-
-
-
 
 

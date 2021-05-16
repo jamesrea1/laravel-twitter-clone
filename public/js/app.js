@@ -2159,7 +2159,8 @@ var _iterator = _createForOfIteratorHelper(buttons),
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var button = _step.value;
-    _tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLike.initialise(button);
+    // tweetLike.initialise(button);
+    (0,_tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLike)(button);
   }
 } catch (err) {
   _iterator.e(err);
@@ -2211,18 +2212,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "tweetLike": () => (/* binding */ tweetLike)
 /* harmony export */ });
-var _this = undefined;
-
 /** @module tweetLike */
-var tweetLike = {
-  initialise: function initialise(button) {
-    button.addEventListener('click', this.requestLike);
-  },
-  requestLike: function requestLike(e) {
-    var tweetId = this.closest('[data-tweet-id]').dataset.tweetId;
-    var likeId = this.dataset.likeId;
-    var tweetIsLiked = parseInt(likeId) > 0;
-    var requestType = tweetIsLiked ? 'destroy' : 'create';
+var tweetLike = function tweetLike(button) {
+  function sendRequest() {
+    var tweetId = button.closest('[data-tweet-id]').dataset.tweetId;
+    var likeId = button.closest('[data-like-id]').dataset.likeId;
+    var requestType = parseInt(likeId) > 0 ? 'destroy' : 'create';
     var endPoints = {
       create: '/api/likes',
       destroy: "/api/likes/".concat(likeId)
@@ -2240,11 +2235,11 @@ var tweetLike = {
         '_method': 'DELETE'
       }
     };
-    axios.post(endPoints[requestType], payloads[requestType]).then(this.updateUi)["catch"](this.handleErrors);
-  },
-  updateUi: function updateUi(response) {
-    console.log(response); // extract objs from response
+    return axios.post(endPoints[requestType], payloads[requestType]);
+  }
 
+  function extractResponseData(response) {
+    // extract objs from response
     var extractData = function extractData(data, type) {
       return data.find(function (el) {
         return el.type == type;
@@ -2252,49 +2247,65 @@ var tweetLike = {
     };
 
     var tweet = extractData(response.data.data, 'tweet');
-    var like = extractData(response.data.data, 'like'); // check extracted data
+    var like = extractData(response.data.data, 'like'); // like created?
 
-    /* if(!(tweet && like)){ return Promise.reject(new Error("Could not extract response data.")); } */
-    // store the created like 
+    var isLiked = !!(like && response.status === 201); // store like state
 
-    _this.dataset.likeId = like ? like.id : ''; // like created?
-
-    var action = like && response.status === 201 ? 'created' : 'destroyed';
-    var likeCreated = !!(like && response.status === 201); // show liked colour
-
-    _this.classList.add(likeCreated ? 'text-twrose' : 'text-bluegray-500');
-
-    _this.classList.remove(!likeCreated ? 'text-twrose' : 'text-bluegray-500'); // show liked icon
-
-
-    var likedIcon = _this.querySelector('.js-likedIcon');
-
-    var likeIcon = _this.querySelector('.js-likeIcon');
-
-    if (likeCreated) {
-      likedIcon.classList.remove('hidden');
-      likeIcon.classList.add('hidden');
-    } else {
-      likeIcon.classList.remove('hidden');
-      likedIcon.classList.add('hidden');
-    } // update like count
-
-
-    var likes = _this.querySelector('.js-likes');
-
-    likes.textContent = tweet.attributes.likes || '';
-  },
-  handleErrors: function handleErrors(error) {
-    if (error.response) {
-      console.log(error.response.data);
-      console.log(error.response.status);
-      console.log(error.response.headers);
-    } else if (error.request) {
-      console.log(error.request);
-    } else {
-      console.log('Error', error.message);
-    }
+    button.dataset.likeId = isLiked ? like.id : '';
+    return {
+      isLiked: isLiked,
+      likes: tweet.attributes.likes,
+      test: 1
+    };
   }
+
+  function updateUI(_ref) {
+    var isLiked = _ref.isLiked,
+        likes = _ref.likes,
+        test = _ref.test;
+    // show liked status colour
+    button.classList.add(isLiked ? 'text-twrose' : 'text-bluegray-500');
+    button.classList.remove(!isLiked ? 'text-twrose' : 'text-bluegray-500'); // show liked status icon
+
+    var likeIcon = button.querySelector('.js-likeIcon');
+    var likedIcon = button.querySelector('.js-likedIcon');
+    (isLiked ? likeIcon : likedIcon).classList.add('hidden');
+    (isLiked ? likedIcon : likeIcon).classList.remove('hidden'); // update like count
+
+    button.querySelector('.js-likes').textContent = likes || '';
+  }
+
+  function handleError(error) {
+    if (error.response) {
+      console.error("Server responded with a status code not in 200 range"); // server exception json, or action method error json
+
+      console.error(error.response.data); // 4xx, 5xx
+
+      console.error("Response status code: ", error.response.status);
+    } else if (error.request) {
+      // no response (error.request is instance of XMLHttpRequest)
+      console.error(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error: ', error.message);
+    } // reset UI
+
+
+    var likes = button.querySelector('.js-likes').textContent;
+    var likeId = button.closest('[data-like-id]').dataset.likeId;
+    var isLiked = !!likeId;
+    updateUI({
+      isLiked: isLiked,
+      likes: likes
+    });
+    console.log("UI Reset");
+  }
+
+  function handleEvent(e) {
+    sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
+  }
+
+  button.addEventListener('click', handleEvent);
 };
 
 /***/ }),
