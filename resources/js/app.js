@@ -9,7 +9,15 @@ tweetProgress.initialise(document.querySelector('.js-publishTweetPanel'));
 
 
 import { tweetLike } from './tweet-like.js';
-const buttons = document.querySelectorAll(".js-tweetLikeBtn");
-for (const button of buttons) {
+for (const button of document.querySelectorAll(".js-tweetLikeBtn")) {
     tweetLike(button);
 }
+
+
+import { follow } from './follow.js';
+for (const button of document.querySelectorAll(".js-followBtn")) {
+    follow(button);
+}
+
+
+

@@ -33,7 +33,7 @@ export const tweetLike = (button) => {
     }
     function extractResponseData(response){
         // extract objs from response
-        const extractData = (data, type) => (
+        const extractData = (data = [], type) => (
             data.find(el => el.type == type) 
         );
         const tweet = extractData(response.data.data, 'tweet');
@@ -47,7 +47,7 @@ export const tweetLike = (button) => {
 
         return {
             isLiked: isLiked,
-            likes: tweet.attributes.likes, test: 1
+            likes: tweet.attributes.likes
         }
     }
     function updateUI({isLiked, likes, test}){
@@ -95,7 +95,10 @@ export const tweetLike = (button) => {
         .then(updateUI)
         .catch(handleError)
     }
-    button.addEventListener('click', handleEvent);
+    
+    if(button){
+        button.addEventListener('click', handleEvent);
+    }
 
 }
 

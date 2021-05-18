@@ -3,6 +3,14 @@
 @import "tailwindcss/base";
 
 @import "tailwindcss/components";
-@import "./components/components-dir.css";
 
 @import "tailwindcss/utilities";
+
+
+
+
+@layer components {
+    @import "./components/components-dir.css";   
+}
+
+

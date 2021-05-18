@@ -18,3 +18,21 @@ mix.js("resources/js/app.js","public/js")
     ])
     .browserSync('laravel-twitter-clone.test:8080/')
     .version(); 
+
+
+mix.webpackConfig({
+    stats: {
+        hash: true,
+        version: true,
+        timings: true,
+        children: true,
+        errors: true,
+        errorDetails: true,
+        warnings: true,
+        chunks: true,
+        modules: false,
+        reasons: true,
+        source: true,
+        publicPath: true,
+    }
+});

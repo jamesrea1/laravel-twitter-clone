@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -45,16 +44,6 @@ class User extends Authenticatable
     ];
 
 
-    public function scopeWhoToFollow(Builder $query)
-    {
-        $following = current_user()->follows()->pluck('id'); 
-
-        $query = $query->whereNotIn('id', $following)
-                       ->where('id', '!=', current_user()->id)
-                       ->inRandomOrder()
-                       ->limit('3');
-    }
-
     public function setPasswordAttribute($value) 
     { 
         $this->attributes['password'] = bcrypt($value); 
@@ -69,7 +58,7 @@ class User extends Authenticatable
 
     public function timeline()
     {
-        $friends = $this->follows()->pluck('id');
+        $friends = $this->follows()->pluck('following_user_id');
 
         return Tweet::withLikes()
                     ->whereIn('user_id', $friends)

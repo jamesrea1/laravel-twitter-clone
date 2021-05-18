@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 
@@ -12,7 +11,8 @@ class ProfilesController extends Controller
     {
         return view('profiles.show')
             ->with(compact('user'))
-            ->with(['tweets' => $user->tweets()->withLikes()->paginate(3)]);
+            ->with(['tweets' => $user->tweets()->withLikes()->paginate(3)])
+            ->with(['following' => $user->following()->get()]);
     }
 
     public function edit(User $user)

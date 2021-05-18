@@ -2138,6 +2138,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var autosize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(autosize__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tweet-progress.js */ "./resources/js/tweet-progress.js");
 /* harmony import */ var _tweet_like_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tweet-like.js */ "./resources/js/tweet-like.js");
+/* harmony import */ var _follow_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./follow.js */ "./resources/js/follow.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2151,21 +2152,35 @@ autosize__WEBPACK_IMPORTED_MODULE_0___default()(document.querySelector('.js-comp
 
 _tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__.tweetProgress.initialise(document.querySelector('.js-publishTweetPanel'));
 
-var buttons = document.querySelectorAll(".js-tweetLikeBtn");
 
-var _iterator = _createForOfIteratorHelper(buttons),
+var _iterator = _createForOfIteratorHelper(document.querySelectorAll(".js-tweetLikeBtn")),
     _step;
 
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var button = _step.value;
-    // tweetLike.initialise(button);
     (0,_tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLike)(button);
   }
 } catch (err) {
   _iterator.e(err);
 } finally {
   _iterator.f();
+}
+
+
+
+var _iterator2 = _createForOfIteratorHelper(document.querySelectorAll(".js-followBtn")),
+    _step2;
+
+try {
+  for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+    var _button = _step2.value;
+    (0,_follow_js__WEBPACK_IMPORTED_MODULE_3__.follow)(_button);
+  }
+} catch (err) {
+  _iterator2.e(err);
+} finally {
+  _iterator2.f();
 }
 
 /***/ }),
@@ -2198,6 +2213,102 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/follow.js":
+/*!********************************!*\
+  !*** ./resources/js/follow.js ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "follow": () => (/* binding */ follow)
+/* harmony export */ });
+/** @module follow */
+var follow = function follow(button) {
+  function sendRequest() {
+    var followingUserId = button.dataset.followingUserId;
+    var isFollowing = Boolean(parseInt(button.dataset.isFollowing));
+    var requestType = isFollowing ? 'destroy' : 'create';
+    var endPoints = {
+      create: '/api/follows',
+      destroy: "/api/follows/".concat(followingUserId)
+    };
+    var payloads = {
+      create: {
+        "data": {
+          "type": "follow",
+          "attributes": {
+            "followingUserId": followingUserId
+          }
+        }
+      },
+      destroy: {
+        '_method': 'DELETE'
+      }
+    };
+    return axios.post(endPoints[requestType], payloads[requestType]);
+  }
+
+  function extractResponseData(response) {
+    // extract objs from response
+    var extractData = function extractData() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var type = arguments.length > 1 ? arguments[1] : undefined;
+      return data.find(function (el) {
+        return el.type == type;
+      });
+    };
+
+    var follow = extractData(response.data.data, 'follow'); // follow created?
+
+    var isFollowing = !!(follow && response.status === 201); // store follow state
+
+    button.dataset.isFollowing = Number(isFollowing);
+    return isFollowing;
+  }
+
+  function updateUI(isFollowing) {
+    //update button text
+    button.querySelector('span').textContent = isFollowing ? 'Following' : 'Follow'; // update button class
+
+    button.classList.remove(!isFollowing ? 'follow-btn--is-following' : 'follow-btn--not-following');
+    button.classList.add(isFollowing ? 'follow-btn--is-following' : 'follow-btn--not-following');
+  }
+
+  function handleError(error) {
+    if (error.response) {
+      console.error("Server responded with a status code not in 200 range"); // server exception json, or action method error json
+
+      console.error(error.response.data); // 4xx, 5xx
+
+      console.error("Response status code: ", error.response.status);
+    } else if (error.request) {
+      // no response (error.request is instance of XMLHttpRequest)
+      console.error(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.error('Error: ', error.message);
+    } // reset UI
+
+
+    var isFollowing = Boolean(parseInt(button.dataset.isFollowing));
+    updateUI(isFollowing);
+    console.log("UI Reset");
+  }
+
+  function handleEvent(e) {
+    e.preventDefault();
+    sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
+  }
+
+  if (button) {
+    button.addEventListener('click', handleEvent);
+  }
+};
 
 /***/ }),
 
@@ -2240,7 +2351,9 @@ var tweetLike = function tweetLike(button) {
 
   function extractResponseData(response) {
     // extract objs from response
-    var extractData = function extractData(data, type) {
+    var extractData = function extractData() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var type = arguments.length > 1 ? arguments[1] : undefined;
       return data.find(function (el) {
         return el.type == type;
       });
@@ -2254,8 +2367,7 @@ var tweetLike = function tweetLike(button) {
     button.dataset.likeId = isLiked ? like.id : '';
     return {
       isLiked: isLiked,
-      likes: tweet.attributes.likes,
-      test: 1
+      likes: tweet.attributes.likes
     };
   }
 
@@ -2305,7 +2417,9 @@ var tweetLike = function tweetLike(button) {
     sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
   }
 
-  button.addEventListener('click', handleEvent);
+  if (button) {
+    button.addEventListener('click', handleEvent);
+  }
 };
 
 /***/ }),
@@ -2324,7 +2438,9 @@ __webpack_require__.r(__webpack_exports__);
 /** @module tweetProgress */
 var tweetProgress = {
   initialise: function initialise(container) {
-    container.addEventListener('input', this.updateTweetProgress);
+    if (container) {
+      container.addEventListener('input', this.updateTweetProgress);
+    }
   },
   updateTweetProgress: function updateTweetProgress(event) {
     // event is delegated to the container, so check event target

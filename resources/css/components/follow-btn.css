@@ -1,0 +1,19 @@
+.follow-btn--is-following{
+    @apply text-white border-none bg-twitter hover:bg-twdanger;
+}
+
+.follow-btn--not-following{
+    @apply text-twitter border-twitter hover:bg-twlightblue100;
+}
+ 
+.follow-btn--is-following:hover div::after{
+    content: "Unfollow";
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+}
+.follow-btn--is-following:hover span{
+    visibility: hidden;
+}

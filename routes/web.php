@@ -28,9 +28,15 @@ Route::middleware('auth')->group(function (){
     
     /* ajax */
     Route::prefix('api')->group(function () {
-    
+        
+        /* likes */
         Route::post('/likes', [App\Http\Controllers\Api\LikesController::class, 'store']);
         Route::delete('/likes/{id}', [App\Http\Controllers\Api\LikesController::class, 'destroy']);
+
+        /* follows */
+        Route::post('/follows', [App\Http\Controllers\Api\FollowsController::class, 'store']);
+        Route::delete('/follows/{id}/', [App\Http\Controllers\Api\FollowsController::class, 'destroy']);
+
     });
     
 

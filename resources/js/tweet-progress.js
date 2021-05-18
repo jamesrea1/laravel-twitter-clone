@@ -3,7 +3,9 @@
 export const tweetProgress = 
 {    
     initialise: function(container) {
-        container.addEventListener('input', this.updateTweetProgress);
+        if(container){
+            container.addEventListener('input', this.updateTweetProgress);
+        }
     },
     updateTweetProgress: function(event) {
         // event is delegated to the container, so check event target

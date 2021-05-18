@@ -18,10 +18,12 @@ module.exports = {
 
       twitter: '#1DA1F2',
       twdarkblue: '#1A91DA',
-      twlightblue: '#E8F5FE',
+      twlightblue: '#E8F5FE',  
+      twlightblue100: '#DAE8F2',  
       twrose: '#e0245e',
       twinput: '#EBEEF0',
       twgray150: '#EFF1F2',
+      twdanger: '#ca2055',
       
       // twitter: '#E72F82',
 
