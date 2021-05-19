@@ -11,7 +11,7 @@ export const follow = (button) => {
         const endPoints = {
             create: '/api/follows',
             destroy: `/api/follows/${followingUserId}`
-        }
+        };
         const payloads = {
             create: {
                 "data": {
@@ -24,12 +24,12 @@ export const follow = (button) => {
             destroy: {
                 '_method': 'DELETE',
             }
-        }
+        };
         
         return axios.post(
             endPoints[requestType], 
             payloads[requestType]
-        )   
+        );   
     }
     function extractResponseData(response){
         // extract objs from response
@@ -71,7 +71,7 @@ export const follow = (button) => {
 
         // reset UI
         const isFollowing = Boolean(parseInt(button.dataset.isFollowing));
-        updateUI(isFollowing)
+        updateUI(isFollowing);
         console.log("UI Reset");
     }
     function handleEvent(e){
@@ -79,7 +79,7 @@ export const follow = (button) => {
         sendRequest()
         .then(extractResponseData)
         .then(updateUI)
-        .catch(handleError)
+        .catch(handleError);
     }
     
     if(button){

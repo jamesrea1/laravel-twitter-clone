@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function (){
     /* ajax */
     Route::prefix('api')->group(function () {
         
+        /* tweets */
+        Route::post('/tweets', [App\Http\Controllers\Api\TweetsController::class, 'store']);
+        
         /* likes */
         Route::post('/likes', [App\Http\Controllers\Api\LikesController::class, 'store']);
         Route::delete('/likes/{id}', [App\Http\Controllers\Api\LikesController::class, 'destroy']);

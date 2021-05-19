@@ -11,7 +11,7 @@ export const tweetLike = (button) => {
         const endPoints = {
             create: '/api/likes',
             destroy: `/api/likes/${likeId}`
-        }
+        };
         const payloads = {
             create: {
                 "data": {
@@ -24,12 +24,12 @@ export const tweetLike = (button) => {
             destroy: {
                 '_method': 'DELETE',
             }
-        }
+        };
         
         return axios.post(
             endPoints[requestType], 
             payloads[requestType]
-        )   
+        );
     }
     function extractResponseData(response){
         // extract objs from response
@@ -48,7 +48,7 @@ export const tweetLike = (button) => {
         return {
             isLiked: isLiked,
             likes: tweet.attributes.likes
-        }
+        };
     }
     function updateUI({isLiked, likes, test}){
         // show liked status colour
@@ -86,14 +86,14 @@ export const tweetLike = (button) => {
         updateUI({
             isLiked, 
             likes
-        })
+        });
         console.log("UI Reset");
     }
     function handleEvent(e){
         sendRequest()
         .then(extractResponseData)
         .then(updateUI)
-        .catch(handleError)
+        .catch(handleError);
     }
     
     if(button){

@@ -9,24 +9,24 @@ export const tweetProgress =
     },
     updateTweetProgress: function(event) {
         // event is delegated to the container, so check event target
-        if(!event.target.matches('.js-composeTweetBody')){
+        if(!event.target.matches('.js-tweetComposeBody')){
             return;
         }
 
-        const counter = this.querySelector('.js-composeTweetCounter');
-        const ring = counter.children[1];
-        const ringBG = counter.children[0];
+        const progress = this.querySelector('.js-tweetComposeProgress');
+        const ring = progress.querySelector('.js-ring');
+        const ringBG = progress.querySelector('.js-ringBG');
     
         // get character count
-        const chars = event.target.value.length;
+        const chars = event.target.value.trim().length ? event.target.value.length : 0;
         const charsRatio = chars/280;
             
         // show counter?
         if(chars > 0){ 
-            counter.classList.remove('hidden');
+            progress.classList.remove('hidden');
         }
         else{
-            counter.classList.add('hidden');
+            progress.classList.add('hidden');
         }
     
         // update svg ring status colour 
@@ -42,17 +42,17 @@ export const tweetProgress =
     
         // show chars remaining warning
         const remaining = 280 - chars;
-        const warning = this.querySelector('.js-composeTweetWarning');
+        const warning = this.querySelector('.js-tweetComposeWarning');
         if(chars < 260){
             // hide counter warning text 
-            warning.innerHTML = "";
+            warning.textContent = "";
             
             // ring size normal
-            counter.classList.remove('w-8', 'h-8');
-            counter.classList.add('w-5', 'h-5');
+            progress.classList.remove('w-8', 'h-8');
+            progress.classList.add('w-5', 'h-5');
             
             // ring viewbox normal
-            counter.setAttribute('viewBox', '0 0 20 20')
+            progress.setAttribute('viewBox', '0 0 20 20')
     
             // circle radius normal
             ring.setAttribute('r', '9');
@@ -63,11 +63,11 @@ export const tweetProgress =
             warning.textContent = remaining;
             
             // increase ring size:
-            counter.classList.remove('w-5', 'h-5');
-            counter.classList.add('w-8', 'h-8');
+            progress.classList.remove('w-5', 'h-5');
+            progress.classList.add('w-8', 'h-8');
             
             // increase ring viewbox
-            counter.setAttribute('viewBox', '0 0 30 30')
+            progress.setAttribute('viewBox', '0 0 30 30')
             
             // increase circle radius
             ring.setAttribute('r', '14');
@@ -89,20 +89,20 @@ export const tweetProgress =
         const offset = circum - (circum * charsRatio);
     
         // update svg ring position
-        ring.setAttribute('stroke-dasharray', circum)
-        ring.setAttribute('stroke-dashoffset', Math.max(offset, 0))
+        ring.setAttribute('stroke-dasharray', circum);
+        ring.setAttribute('stroke-dashoffset', Math.max(offset, 0));
             
         // enable the submit button?
-        const submit = this.querySelector('.js-composeTweetSubmit');
+        const submit = this.querySelector('.js-tweetPublishSubmit');
         if(chars > 0 && chars <= 280){
             submit.disabled = false;
-            submit.classList.remove('bg-opacity-40', 'cursor-default')
-            submit.classList.add('hover:bg-twdarkblue', 'shadow')
+            submit.classList.remove('bg-opacity-40', 'cursor-default');
+            submit.classList.add('hover:bg-twdarkblue', 'shadow');
         }
         else{
             submit.disabled = true;
-            submit.classList.add('bg-opacity-40', 'cursor-default')
-            submit.classList.remove('hover:bg-twdarkblue', 'shadow')
+            submit.classList.add('bg-opacity-40', 'cursor-default');
+            submit.classList.remove('hover:bg-twdarkblue', 'shadow');
         }
     }
 }

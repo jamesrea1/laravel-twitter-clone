@@ -1,6 +1,6 @@
-<div class="js-publishTweetPanel px-4 py-2 border-b border-gray-200">
-    <form action="{{ url('tweets') }}" method="POST" id="composeTweetForm">
-        @csrf
+<div class="js-tweetPublish px-4 py-2 border-b border-gray-200">
+    {{-- <form action="{{ url('tweets') }}" method="POST" id="composeTweetForm"> --}}
+        {{-- @csrf --}}
         <div class="flex">
             <div class="mr-3 flex-shrink-0">
                 <a href="{{ current_user()->path() }}" class="block w-12 h-12 rounded-full overflow-hidden"> 
@@ -11,14 +11,14 @@
                 <div class="py-3">
                     <textarea
                         name="body" 
-                        class="js-composeTweetBody focus:outline-none text-xl w-full resize-none pb-2"
+                        class="js-tweetComposeBody focus:outline-none text-xl w-full resize-none pb-2"
                         rows="1" 
                         autocomplete="off"
                         placeholder="What's happening?"
-                    >{{ old('body') }}</textarea>
-                    @error('body')
-                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
-                    @enderror
+                    >{{-- {{ old('body') }} --}}</textarea>
+                    {{-- @error('body') --}}
+                        {{-- <p class="text-red-600 text-sm mt-2">{{ $message }}</p> --}}
+                    {{-- @enderror --}}
                 </div>
                 <div class="mt-2 flex justify-between items-center">
                     <div class="-ml-3 flex">
@@ -39,21 +39,21 @@
                         </a>
                     </div>
                     <div class="w-8 h-8 ml-auto mr-4 relative flex items-center justify-center">
-                        <svg class="js-composeTweetCounter w-5 h-5 hidden" height="100%" width="100%" viewBox="0 0 20 20" style="overflow: visible; transform: rotate(-90deg); transition: width 150ms, height 150ms;">
-                            <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#EBEEF0"></circle>
-                            <circle cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#1DA1F2"
+                        <svg class="js-tweetComposeProgress w-5 h-5 hidden" height="100%" width="100%" viewBox="0 0 20 20" style="overflow: visible; transform: rotate(-90deg); transition: width 150ms, height 150ms;">
+                            <circle class="js-ringBG" cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#EBEEF0"></circle>
+                            <circle class="js-ring" cx="50%" cy="50%" fill="none" stroke-width="2" r="9" stroke="#1DA1F2"
                                     stroke-linecap="round"
                                     stroke-dashoffset="56.5487"
                                     stroke-dasharray="56.5487"
                             ></circle>
                         </svg>
                         <div class="absolute inset-0 items-center justify-center flex">
-                            <span class="js-composeTweetWarning text-xs text-gray-500"></span>
+                            <span class="js-tweetComposeWarning text-xs text-gray-500"></span>
                         </div>
                     </div>
                     <div>
                         <button type="submit" 
-                            class="js-composeTweetSubmit block py-2.5 px-4 rounded-full text-white font-bold bg-twitter transition-colors duration-200
+                            class="js-tweetPublishSubmit block py-2.5 px-4 rounded-full text-white font-bold bg-twitter transition-colors duration-200
                                 bg-opacity-40 cursor-default" 
                             disabled 
                         >

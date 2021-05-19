@@ -5,7 +5,7 @@
         </header>
         <main class="flex flex-col items-start flex-grow">
             <div class="l-main flex items-stretch justify-between">
-                <div class="l-content border-l border-r border-gray-200">
+                <div class="l-content w-full border-l border-r border-gray-200">
                     {{ $slot }}
                 </div>
                 <div class="l-sidebar mr-2.5">

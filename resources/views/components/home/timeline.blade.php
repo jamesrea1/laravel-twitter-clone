@@ -2,7 +2,7 @@
     'tweets', 
 ])
 
-<div class="[ divide-y divide-gray-200 ] border-b border-gray-200">
+<div class="js-timeline [ divide-y divide-gray-200 ] border-b border-gray-200">
     @forelse ($tweets as $tweet)
         @include('partials/_tweet')
     @empty
