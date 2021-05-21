@@ -3,9 +3,6 @@
 export const tweetPublish = (container) => {
 
     function sendRequest(){
-        
-        const tweetComposeBody = container.querySelector('.js-tweetComposeBody');
-        
         if(!tweetComposeBody.value.trim().length){
             return Promise.reject("Tweet empty");
         }
@@ -34,12 +31,16 @@ export const tweetPublish = (container) => {
     function updateUI(html){ 
         function parseHTML(html) {
             var t = document.createElement('template');
-            t.innerHTML = html;
+            t.innerHTML = html.trim();  
             return t.content;
         }
-        const documentFragment = parseHTML(html);
+        const tweetFragment = parseHTML(html);
         const timeline = document.querySelector('.js-timeline');
-        timeline.prepend(documentFragment);
+        timeline.insertBefore(tweetFragment, timeline.firstChild);
+
+        tweetComposeBody.value = "";
+        const evt = new Event("input", {"bubbles":true, "cancelable":false});
+        tweetComposeBody.dispatchEvent(evt)
     }
     function handleError(error){
         if (error.response) {
@@ -67,6 +68,7 @@ export const tweetPublish = (container) => {
         .catch(handleError);
     }
     
+    const tweetComposeBody = container.querySelector('.js-tweetComposeBody');
     if(container){
         container.addEventListener('click', handleEvent);
     }

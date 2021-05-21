@@ -2548,8 +2548,6 @@ __webpack_require__.r(__webpack_exports__);
 /** @module tweetPublish */
 var tweetPublish = function tweetPublish(container) {
   function sendRequest() {
-    var tweetComposeBody = container.querySelector('.js-tweetComposeBody');
-
     if (!tweetComposeBody.value.trim().length) {
       return Promise.reject("Tweet empty");
     } else if (tweetComposeBody.value.length > 280) {
@@ -2575,13 +2573,19 @@ var tweetPublish = function tweetPublish(container) {
   function updateUI(html) {
     function parseHTML(html) {
       var t = document.createElement('template');
-      t.innerHTML = html;
+      t.innerHTML = html.trim();
       return t.content;
     }
 
-    var documentFragment = parseHTML(html);
+    var tweetFragment = parseHTML(html);
     var timeline = document.querySelector('.js-timeline');
-    timeline.prepend(documentFragment);
+    timeline.insertBefore(tweetFragment, timeline.firstChild);
+    tweetComposeBody.value = "";
+    var evt = new Event("input", {
+      "bubbles": true,
+      "cancelable": false
+    });
+    tweetComposeBody.dispatchEvent(evt);
   }
 
   function handleError(error) {
@@ -2608,6 +2612,8 @@ var tweetPublish = function tweetPublish(container) {
 
     sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
   }
+
+  var tweetComposeBody = container.querySelector('.js-tweetComposeBody');
 
   if (container) {
     container.addEventListener('click', handleEvent);

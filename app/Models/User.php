@@ -60,10 +60,12 @@ class User extends Authenticatable
     {
         $friends = $this->follows()->pluck('following_user_id');
 
-        return Tweet::withLikes()
+        $tweets = Tweet::withLikes()
                     ->whereIn('user_id', $friends)
                     ->orWhere('user_id', $this->id)
                     ->latest()->paginate(10);
+        //dd($tweets);
+        return $tweets;
     }
 
 

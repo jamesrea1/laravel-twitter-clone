@@ -9,9 +9,7 @@ use App\Http\Controllers\Controller;
 class TweetsController extends Controller
 {
     public function store(Request $request)
-    {
-        //if(request()->wantsJson()) 
-        
+    {        
         // this will automatically generate a ValidationException and return a 422 error response when request is invalid
         $attributes = $request->validate([
             'data.attributes.body' => 'required|max:280'
@@ -33,11 +31,8 @@ class TweetsController extends Controller
         //     ]
         // ], 201);
 
-
-
         $html = view('partials._tweet')->with(compact('tweet'))->render(); 
         return response()->json(['success' => true, 'html' => $html], 201);
-        
 
     }
 }

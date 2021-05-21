@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Like;
 use App\Models\Tweet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,17 +13,28 @@ class LikesController extends Controller
     {
         try 
         {
-            $tweet = Tweet::findOrFail($request->input('data.attributes.tweetId'));
-            $like = $tweet->like(current_user());  
-            $likes = $tweet->likes()->count();
+            //$tweet = Tweet::withCount('likes')->findOrFail($request->input('data.attributes.tweetId'));
+            //$like = $tweet->like(current_user());  
+            //$likes = $tweet->likes()->count();
             
+            
+            
+            $tweet_id = $request->input('data.attributes.tweetId');
+            $like = Like::create([
+                'user_id' => current_user()->id,
+                'tweet_id' => $tweet_id,
+                'liked' => 1
+            ]);
+            $likes = Like::where('tweet_id', $tweet_id)->count();
+            
+
             return response()->json([
                 'success' => true,
                 'data' => [
                     [
                         'type' => 'tweet',
-                        'id' => $tweet->id,
-                        'attributes' => [ 'likes' => $likes]
+                        'id' => $tweet_id,
+                        'attributes' => [ 'likes' => $likes]   //$tweet->likes_count]
                     ],
                     [
                         'type' => 'like',
@@ -45,18 +57,24 @@ class LikesController extends Controller
     {
         try 
         {
+            //// make sure we're deleting a like that belongs to the user
+            // $like = current_user()->likes()->findOrFail($id);
+            // $tweet = Tweet::findOrFail($like->tweet_id);
+            // $like->delete();
+            // $likes = $tweet->likes()->count();
+            
             // make sure we're deleting a like that belongs to the user
             $like = current_user()->likes()->findOrFail($id);
-            $tweet = Tweet::findOrFail($like->tweet_id);
+            $tweet_id = $like->tweet_id;
             $like->delete();
-            $likes = $tweet->likes()->count();
+            $likes = Like::where('tweet_id', $tweet_id)->count();
 
             return response()->json([
                 'success' => true,
                 'data' => [
                     [
                         'type' => 'tweet',
-                        'id' => $tweet->id,
+                        'id' => $tweet_id,
                         'attributes' => ['likes' => $likes]
                     ],
                 ]

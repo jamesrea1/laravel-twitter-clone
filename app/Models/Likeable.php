@@ -26,7 +26,7 @@ trait Likeable
 
         $sub = DB::table('likes')
             ->selectRaw(
-                "tweet_id, SUM(liked) likes, SUM(!liked) dislikes"
+                "tweet_id, SUM(liked) likes_count, SUM(!liked) dislikes_count"
             )
             ->groupBy(
                 'tweet_id'
