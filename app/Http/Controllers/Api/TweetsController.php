@@ -19,20 +19,32 @@ class TweetsController extends Controller
             'user_id' => current_user()->id,
             'body' => $attributes['data']['attributes']['body']
         ]);
+        //$tweet->loadCount('likes');
 
-        // return response()->json([
-        //     'success' => true,
-        //     'data' => [
-        //         [
-        //             'type' => 'tweet',
-        //             'id' => $tweet->id,
-        //             'attributes' => [ 'body' => $tweet->body ]
-        //         ],
-        //     ]
-        // ], 201);
+        return response()->json([
+            'success' => true,
+            'data' => [
+                [
+                    'type' => 'tweet',
+                    'id' => $tweet->id,
+                    'attributes' => [ 
+                        'publishedDate' => 'now', //$tweet->published_date,
+                        'body' => $tweet->body,
+                        'profileLink' => $tweet->user->path(),
+                        'avatar' => $tweet->user->avatar,
+                        'name' => $tweet->user->name,
+                        'username' => $tweet->user->username,
+                        'likeId' => null, //$tweet->getLikeBy(current_user()),
+                        'likesCount' => 0, //$tweet->likes_count,
+                    ],
+                ],
+            ]
+        ], 201);
 
-        $html = view('partials._tweet')->with(compact('tweet'))->render(); 
-        return response()->json(['success' => true, 'html' => $html], 201);
+        
+        
+        // $html = view('partials._tweet')->with(compact('tweet'))->render(); 
+        // return response()->json(['success' => true, 'html' => $html], 201);
 
     }
 }

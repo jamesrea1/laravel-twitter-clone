@@ -10,3 +10,6 @@
     @endforelse
 </div>
 <div class="py-4 mx-auto bg-bluegray-50">{{ $tweets->onEachSide(2)->links() }}</div>
+
+
+

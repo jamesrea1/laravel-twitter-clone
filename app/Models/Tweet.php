@@ -13,7 +13,15 @@ class Tweet extends Model
 
     public function getPublishedDateAttribute()
     {
-        if($this->created_at->diffInHours() <= 24)
+        if($this->created_at->diffInSeconds() <= 60)
+        {
+            return $this->created_at->diffInSeconds().'s';
+        }
+        else if($this->created_at->diffInMinutes() <= 60)
+        {
+            return $this->created_at->diffInMinutes().'m';
+        }
+        else if($this->created_at->diffInHours() <= 24)
         {
             return $this->created_at->diffInHours().'h';
         }

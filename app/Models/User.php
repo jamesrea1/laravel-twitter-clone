@@ -64,7 +64,6 @@ class User extends Authenticatable
                     ->whereIn('user_id', $friends)
                     ->orWhere('user_id', $this->id)
                     ->latest()->paginate(10);
-        //dd($tweets);
         return $tweets;
     }
 

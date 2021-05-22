@@ -2139,7 +2139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./tweet-progress.js */ "./resources/js/tweet-progress.js");
 /* harmony import */ var _tweet_like_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./tweet-like.js */ "./resources/js/tweet-like.js");
 /* harmony import */ var _follow_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./follow.js */ "./resources/js/follow.js");
-/* harmony import */ var _tweet_publish__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./tweet-publish */ "./resources/js/tweet-publish.js");
+/* harmony import */ var _tweet_publish_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./tweet-publish-json.js */ "./resources/js/tweet-publish-json.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2153,15 +2153,21 @@ autosize__WEBPACK_IMPORTED_MODULE_0___default()(document.querySelector('.js-twee
 
 _tweet_progress_js__WEBPACK_IMPORTED_MODULE_1__.tweetProgress.initialise(document.querySelector('.js-tweetPublish'));
 
+(0,_tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLikeInitialise)(document.querySelector('.js-timeline'));
 
-var _iterator = _createForOfIteratorHelper(document.querySelectorAll(".js-tweetLikeBtn")),
+
+var _iterator = _createForOfIteratorHelper(document.querySelectorAll(".js-followBtn")),
     _step;
 
 try {
   for (_iterator.s(); !(_step = _iterator.n()).done;) {
     var button = _step.value;
-    (0,_tweet_like_js__WEBPACK_IMPORTED_MODULE_2__.tweetLike)(button);
-  }
+    (0,_follow_js__WEBPACK_IMPORTED_MODULE_3__.follow)(button);
+  } // import { tweetPublish } from './tweet-publish.js';
+  // tweetPublish(document.querySelector(".js-tweetPublish"),
+  //     document.querySelector('.js-timeline')
+  // );
+
 } catch (err) {
   _iterator.e(err);
 } finally {
@@ -2169,23 +2175,8 @@ try {
 }
 
 
-
-var _iterator2 = _createForOfIteratorHelper(document.querySelectorAll(".js-followBtn")),
-    _step2;
-
-try {
-  for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-    var _button = _step2.value;
-    (0,_follow_js__WEBPACK_IMPORTED_MODULE_3__.follow)(_button);
-  }
-} catch (err) {
-  _iterator2.e(err);
-} finally {
-  _iterator2.f();
-}
-
-
-(0,_tweet_publish__WEBPACK_IMPORTED_MODULE_4__.tweetPublish)(document.querySelector(".js-tweetPublish"));
+(0,_tweet_publish_json_js__WEBPACK_IMPORTED_MODULE_4__.tweetPublishJson)(document.querySelector(".js-tweetPublish"), document.querySelector('.js-timeline')); // import { timeline } from './timeline.js';
+// timeline();
 
 /***/ }),
 
@@ -2325,105 +2316,164 @@ var follow = function follow(button) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "tweetLike": () => (/* binding */ tweetLike)
+/* harmony export */   "tweetLikeInitialise": () => (/* binding */ tweetLikeInitialise),
+/* harmony export */   "updateLikeButtonStyle": () => (/* binding */ updateLikeButtonStyle),
+/* harmony export */   "updateLikeButtonLikes": () => (/* binding */ updateLikeButtonLikes)
 /* harmony export */ });
 /** @module tweetLike */
-var tweetLike = function tweetLike(button) {
-  function sendRequest() {
-    var tweetId = button.closest('[data-tweet-id]').dataset.tweetId;
-    var likeId = button.closest('[data-like-id]').dataset.likeId;
-    var requestType = parseInt(likeId) > 0 ? 'destroy' : 'create';
-    var endPoints = {
-      create: '/api/likes',
-      destroy: "/api/likes/".concat(likeId)
-    };
-    var payloads = {
-      create: {
-        "data": {
-          "type": "like",
-          "attributes": {
-            "tweetId": tweetId
+var tweetLikeInitialise = function tweetLikeInitialise(container) {
+  function handleLikeEvent(event) {
+    function sendRequest() {
+      var tweetId = button.closest('[data-tweet-id]').dataset.tweetId;
+      var likeId = button.closest('[data-like-id]').dataset.likeId;
+      var requestType = parseInt(likeId) > 0 ? 'destroy' : 'create';
+      var endPoints = {
+        create: '/api/likes',
+        destroy: "/api/likes/".concat(likeId)
+      };
+      var payloads = {
+        create: {
+          "data": {
+            "type": "like",
+            "attributes": {
+              "tweetId": tweetId
+            }
           }
+        },
+        destroy: {
+          '_method': 'DELETE'
         }
-      },
-      destroy: {
-        '_method': 'DELETE'
-      }
-    };
-    return axios.post(endPoints[requestType], payloads[requestType]);
-  }
+      };
+      return axios.post(endPoints[requestType], payloads[requestType]);
+    }
 
-  function extractResponseData(response) {
-    // extract objs from response
-    var extractData = function extractData() {
-      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-      var type = arguments.length > 1 ? arguments[1] : undefined;
-      return data.find(function (el) {
-        return el.type == type;
+    function extractResponseData(response) {
+      var extractData = function extractData() {
+        var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var type = arguments.length > 1 ? arguments[1] : undefined;
+        return data.find(function (el) {
+          return el.type == type;
+        });
+      };
+
+      var tweet = extractData(response.data.data, 'tweet');
+      var like = extractData(response.data.data, 'like'); // like created?
+
+      var isLiked = !!(like && response.status === 201);
+      var likeId = isLiked ? like.id : '';
+      return {
+        isLiked: isLiked,
+        likeId: likeId,
+        likes: tweet.attributes.likes
+      };
+    }
+
+    function updateUI(_ref) {
+      var isLiked = _ref.isLiked,
+          likeId = _ref.likeId,
+          likes = _ref.likes;
+      button.dataset.likeId = likeId;
+      updateLikeButtonStyle(button, isLiked);
+      updateLikeButtonLikes(button, likes);
+    }
+
+    function handleError(error) {
+      if (error.response) {
+        console.error("Server responded with a status code not in 200 range"); // server exception json, or action method error json
+
+        console.error(error.response.data); // 4xx, 5xx
+
+        console.error("Response status code: ", error.response.status);
+      } else if (error.request) {
+        // no response (error.request is instance of XMLHttpRequest)
+        console.error(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error: ', error.message);
+      } // reset UI
+
+
+      var likes = button.querySelector('.js-likes').textContent;
+      var likeId = button.closest('[data-like-id]').dataset.likeId;
+      var isLiked = !!likeId;
+      updateUI({
+        isLiked: isLiked,
+        likes: likes
       });
-    };
-
-    var tweet = extractData(response.data.data, 'tweet');
-    var like = extractData(response.data.data, 'like'); // like created?
-
-    var isLiked = !!(like && response.status === 201); // store like state
-
-    button.dataset.likeId = isLiked ? like.id : '';
-    return {
-      isLiked: isLiked,
-      likes: tweet.attributes.likes
-    };
-  }
-
-  function updateUI(_ref) {
-    var isLiked = _ref.isLiked,
-        likes = _ref.likes,
-        test = _ref.test;
-    // show liked status colour
-    button.classList.add(isLiked ? 'text-twrose' : 'text-bluegray-500');
-    button.classList.remove(!isLiked ? 'text-twrose' : 'text-bluegray-500'); // show liked status icon
-
-    var likeIcon = button.querySelector('.js-likeIcon');
-    var likedIcon = button.querySelector('.js-likedIcon');
-    (isLiked ? likeIcon : likedIcon).classList.add('hidden');
-    (isLiked ? likedIcon : likeIcon).classList.remove('hidden'); // update like count
-
-    button.querySelector('.js-likes').textContent = likes || '';
-  }
-
-  function handleError(error) {
-    if (error.response) {
-      console.error("Server responded with a status code not in 200 range"); // server exception json, or action method error json
-
-      console.error(error.response.data); // 4xx, 5xx
-
-      console.error("Response status code: ", error.response.status);
-    } else if (error.request) {
-      // no response (error.request is instance of XMLHttpRequest)
-      console.error(error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error('Error: ', error.message);
-    } // reset UI
+      console.log("UI Reset");
+    } // check delegated event is from a like button
 
 
-    var likes = button.querySelector('.js-likes').textContent;
-    var likeId = button.closest('[data-like-id]').dataset.likeId;
-    var isLiked = !!likeId;
-    updateUI({
-      isLiked: isLiked,
-      likes: likes
-    });
-    console.log("UI Reset");
-  }
+    var button = event.target.closest('.js-tweetLikeBtn');
 
-  function handleEvent(e) {
+    if (!button) {
+      return;
+    }
+
     sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
   }
 
-  if (button) {
-    button.addEventListener('click', handleEvent);
+  if (container) {
+    container.addEventListener('click', handleLikeEvent);
   }
+};
+
+var updateLikeButtonStyle = function updateLikeButtonStyle(likeButton, isLiked) {
+  // show liked status colour
+  likeButton.classList.add(isLiked ? 'text-twrose' : 'text-bluegray-500');
+  likeButton.classList.remove(!isLiked ? 'text-twrose' : 'text-bluegray-500'); // show liked status icon
+
+  var likeIcon = likeButton.querySelector('.js-likeIcon');
+  var likedIcon = likeButton.querySelector('.js-likedIcon');
+  (isLiked ? likeIcon : likedIcon).classList.add('hidden');
+  (isLiked ? likedIcon : likeIcon).classList.remove('hidden');
+};
+
+var updateLikeButtonLikes = function updateLikeButtonLikes(likeButton, likes) {
+  // update like count
+  likeButton.querySelector('.js-likes').textContent = likes || '';
+};
+
+
+
+/***/ }),
+
+/***/ "./resources/js/tweet-make.js":
+/*!************************************!*\
+  !*** ./resources/js/tweet-make.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "tweetMake": () => (/* binding */ tweetMake)
+/* harmony export */ });
+/* harmony import */ var _tweet_like_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tweet-like.js */ "./resources/js/tweet-like.js");
+/** @module tweetMake */
+
+var tweetMake = function tweetMake(_ref) {
+  var id = _ref.id,
+      attributes = _ref.attributes;
+  var publishedDate = attributes.publishedDate,
+      body = attributes.body,
+      profileLink = attributes.profileLink,
+      avatar = attributes.avatar,
+      name = attributes.name,
+      username = attributes.username,
+      likeId = attributes.likeId,
+      likesCount = attributes.likesCount;
+  var html = "\n        <div data-tweet-id=\"".concat(id, "\" class=\"js-tweet flex px-4 pt-3 pb-1 cursor-pointer hover:bg-gray-50 transition-colors duration-200\">\n            <div class=\"mr-3 flex-shrink-0\">\n                <a href=\"").concat(profileLink, "\" class=\"block w-12 h-12 rounded-full overflow-hidden\">\n                    <img\n                        src=\"").concat(avatar, "\"\n                        alt=\"").concat(username, "\"\n                        class=\"object-cover h-full w-full filter hover:brightness-90 transition-all\"\n                    >\n                </a>\n            </div>\n            <div class=\"flex-auto min-w-0\">\n                <h5 class=\"flex items-center whitespace-nowrap\">\n                    <a href=\"").concat(profileLink, "\" class=\"group font-bold truncate inline-block\" style=\"max-width: 80%\">\n                        <span class=\"group-hover:underline\">").concat(name, "</span>\n                        <span class=\"text-bluegray-500 font-normal ml-0.5\"> @").concat(username, "</span>\n                    </a>\n                    <span class=\"text-bluegray-500 font-normal block ml-1\">\xB7 ").concat(publishedDate, "</span>\n                </h5>\n\n                <p class=\"mt-1 break-words\">\n                    ").concat(body, "\n                </p>\n\n                <div class=\"flex justify-between w-11/12 mt-1 -ml-2.5\">\n                    \n                    <button type=\"submit\" class=\"inline-flex items-center group cursor-pointer text-bluegray-500\">\n                        <div class=\"w-9 h-9 flex items-center justify-center rounded-full transition duration-200\n                            group-hover:text-twitter group-hover:bg-twlightblue\n                        \">\n                            <svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><g><path d=\"M14.046 2.242l-4.148-.01h-.002c-4.374 0-7.8 3.427-7.8 7.802 0 4.098 3.186 7.206 7.465 7.37v3.828c0 .108.044.286.12.403.142.225.384.347.632.347.138 0 .277-.038.402-.118.264-.168 6.473-4.14 8.088-5.506 1.902-1.61 3.04-3.97 3.043-6.312v-.017c-.006-4.367-3.43-7.787-7.8-7.788zm3.787 12.972c-1.134.96-4.862 3.405-6.772 4.643V16.67c0-.414-.335-.75-.75-.75h-.396c-3.66 0-6.318-2.476-6.318-5.886 0-3.534 2.768-6.302 6.3-6.302l4.147.01h.002c3.532 0 6.3 2.766 6.302 6.296-.003 1.91-.942 3.844-2.514 5.176z\"></path></g></svg>\n                        </div>\n                        <span class=\"text-xs ml-1 mr-2 group-hover:text-twitter transition duration-200\" style=\"min-width:20px\"></span>\n                    </button> \n\n                    <button type=\"submit\" class=\"inline-flex items-center group cursor-pointer text-bluegray-500\">\n                        <div class=\"w-9 h-9 flex items-center justify-center rounded-full transition duration-200\n                            group-hover:text-green-600 group-hover:bg-green-600 group-hover:bg-opacity-10\n                        \">\n                            <svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><g><path d=\"M23.77 15.67c-.292-.293-.767-.293-1.06 0l-2.22 2.22V7.65c0-2.068-1.683-3.75-3.75-3.75h-5.85c-.414 0-.75.336-.75.75s.336.75.75.75h5.85c1.24 0 2.25 1.01 2.25 2.25v10.24l-2.22-2.22c-.293-.293-.768-.293-1.06 0s-.294.768 0 1.06l3.5 3.5c.145.147.337.22.53.22s.383-.072.53-.22l3.5-3.5c.294-.292.294-.767 0-1.06zm-10.66 3.28H7.26c-1.24 0-2.25-1.01-2.25-2.25V6.46l2.22 2.22c.148.147.34.22.532.22s.384-.073.53-.22c.293-.293.293-.768 0-1.06l-3.5-3.5c-.293-.294-.768-.294-1.06 0l-3.5 3.5c-.294.292-.294.767 0 1.06s.767.293 1.06 0l2.22-2.22V16.7c0 2.068 1.683 3.75 3.75 3.75h5.85c.414 0 .75-.336.75-.75s-.337-.75-.75-.75z\"></path></g></svg>\n                        </div>\n                        <span class=\"text-xs ml-1 mr-2 group-hover:text-green-600 transition duration-200\" style=\"min-width:20px\"></span>\n                    </button> \n                    \n                    <button data-like-id=\"").concat(likeId, "\" class=\"js-tweetLikeBtn inline-flex items-center group cursor-pointer text-bluegray-500\">\n                        <div class=\"w-9 h-9 flex items-center justify-center rounded-full transition duration-200\n                            group-hover:text-twrose group-hover:bg-twrose group-hover:bg-opacity-10\n                        \">\n                            <svg class=\"js-likedIcon w-5 h-5 hidden\" fill=\"currentColor\" viewBox=\"0 0 24 24\" ><g><path d=\"M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z\"></path></g></svg>\n                            <svg class=\"js-likeIcon w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><g><path d=\"M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z\"></path></g></svg>    \n                        </div>\n                        <span class=\"js-likes text-xs ml-1 mr-2 group-hover:text-twrose transition duration-200\" style=\"min-width:20px\">").concat(likesCount || '', "</span>\n                    </button> \n\n                    <div class=\"\">\n                        <a href=\"#\" style=\"\" class=\"w-9 h-9 flex items-center justify-center rounded-full transition duration-200\n                            text-bluegray-500 hover:text-twitter hover:bg-twlightblue\n                        \">\n                            <svg class=\"w-5 h-5\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><g><path d=\"M17.53 7.47l-5-5c-.293-.293-.768-.293-1.06 0l-5 5c-.294.293-.294.768 0 1.06s.767.294 1.06 0l3.72-3.72V15c0 .414.336.75.75.75s.75-.336.75-.75V4.81l3.72 3.72c.146.147.338.22.53.22s.384-.072.53-.22c.293-.293.293-.767 0-1.06z\"></path><path d=\"M19.708 21.944H4.292C3.028 21.944 2 20.916 2 19.652V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 .437.355.792.792.792h15.416c.437 0 .792-.355.792-.792V14c0-.414.336-.75.75-.75s.75.336.75.75v5.652c0 1.264-1.028 2.292-2.292 2.292z\"></path></g></svg>\n                        </a>\n                    </div>\n\n                </div>\n            </div>\n        </div>\n    ");
+
+  function parseHTML(html) {
+    var t = document.createElement('template');
+    t.innerHTML = html.trim();
+    return t.content;
+  }
+
+  var tweetFragment = parseHTML(html);
+  (0,_tweet_like_js__WEBPACK_IMPORTED_MODULE_0__.updateLikeButtonStyle)(tweetFragment.querySelector('.js-tweetLikeBtn'), likeId);
+  return tweetFragment;
 };
 
 /***/ }),
@@ -2534,19 +2584,21 @@ var tweetProgress = {
 
 /***/ }),
 
-/***/ "./resources/js/tweet-publish.js":
-/*!***************************************!*\
-  !*** ./resources/js/tweet-publish.js ***!
-  \***************************************/
+/***/ "./resources/js/tweet-publish-json.js":
+/*!********************************************!*\
+  !*** ./resources/js/tweet-publish-json.js ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "tweetPublish": () => (/* binding */ tweetPublish)
+/* harmony export */   "tweetPublishJson": () => (/* binding */ tweetPublishJson)
 /* harmony export */ });
-/** @module tweetPublish */
-var tweetPublish = function tweetPublish(container) {
+/* harmony import */ var _tweet_make_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tweet-make.js */ "./resources/js/tweet-make.js");
+/** @module tweetPublishJson */
+
+var tweetPublishJson = function tweetPublishJson(publishContainer, timeline) {
   function sendRequest() {
     if (!tweetComposeBody.value.trim().length) {
       return Promise.reject("Tweet empty");
@@ -2567,19 +2619,23 @@ var tweetPublish = function tweetPublish(container) {
   }
 
   function extractResponseData(response) {
-    return response.data.html;
+    var extractData = function extractData() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var type = arguments.length > 1 ? arguments[1] : undefined;
+      return data.find(function (el) {
+        return el.type == type;
+      });
+    };
+
+    var tweet = extractData(response.data.data, 'tweet');
+    return tweet;
   }
 
-  function updateUI(html) {
-    function parseHTML(html) {
-      var t = document.createElement('template');
-      t.innerHTML = html.trim();
-      return t.content;
-    }
+  function updateUI(tweetData) {
+    // render tweet
+    var tweetFragment = (0,_tweet_make_js__WEBPACK_IMPORTED_MODULE_0__.tweetMake)(tweetData);
+    timeline.insertBefore(tweetFragment, timeline.firstChild); // reset tweet compose textarea, and progress status
 
-    var tweetFragment = parseHTML(html);
-    var timeline = document.querySelector('.js-timeline');
-    timeline.insertBefore(tweetFragment, timeline.firstChild);
     tweetComposeBody.value = "";
     var evt = new Event("input", {
       "bubbles": true,
@@ -2606,17 +2662,17 @@ var tweetPublish = function tweetPublish(container) {
 
   function handleEvent(event) {
     // event is delegated to the container, so check event target
-    if (!container.querySelector('.js-tweetPublishSubmit').contains(event.target)) {
+    if (!publishContainer.querySelector('.js-tweetPublishSubmit').contains(event.target)) {
       return;
     }
 
     sendRequest().then(extractResponseData).then(updateUI)["catch"](handleError);
   }
 
-  var tweetComposeBody = container.querySelector('.js-tweetComposeBody');
+  var tweetComposeBody = publishContainer.querySelector('.js-tweetComposeBody');
 
-  if (container) {
-    container.addEventListener('click', handleEvent);
+  if (publishContainer) {
+    publishContainer.addEventListener('click', handleEvent);
   }
 };
 

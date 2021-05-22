@@ -1,7 +1,8 @@
-/** @module tweetPublish */
+/** @module tweetPublishJson */
 
-export const tweetPublish = (publishContainer, timeline) => {
+import {tweetMake} from './tweet-make.js'
 
+export const tweetPublishJson = (publishContainer, timeline) => {
     function sendRequest(){
         if(!tweetComposeBody.value.trim().length){
             return Promise.reject("Tweet empty");
@@ -26,18 +27,19 @@ export const tweetPublish = (publishContainer, timeline) => {
         ); 
     }
     function extractResponseData(response){
-        return response.data.html
+        const extractData = (data = [], type) => (
+            data.find(el => el.type == type) 
+        );
+        const tweet = extractData(response.data.data, 'tweet');
+
+        return tweet;
     }
-    function updateUI(html){ 
-        function parseHTML(html) {
-            var t = document.createElement('template');
-            t.innerHTML = html.trim();  
-            return t.content;
-        }
-        const tweetFragment = parseHTML(html);
-        // const timeline = document.querySelector('.js-timeline');
+    function updateUI(tweetData){ 
+        // render tweet
+        const tweetFragment = tweetMake(tweetData);
         timeline.insertBefore(tweetFragment, timeline.firstChild);
 
+        // reset tweet compose textarea, and progress status
         tweetComposeBody.value = "";
         const evt = new Event("input", {"bubbles":true, "cancelable":false});
         tweetComposeBody.dispatchEvent(evt)
@@ -72,5 +74,4 @@ export const tweetPublish = (publishContainer, timeline) => {
     if(publishContainer){
         publishContainer.addEventListener('click', handleEvent);
     }
-
 }
