@@ -1,4 +1,4 @@
-<div data-tweet-id="{{ $tweet->id }}" class="js-tweet flex px-4 pt-3 pb-1 cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+<div data-tweet-id="{{ $tweet->id }}" class="js-tweet flex px-4 pt-3 pb-1 cursor-pointer hover:bg-gray-50 transition-colors duration-200 border-b border-gray-200">
     <div class="mr-3 flex-shrink-0">
         <a href="{{ $tweet->user->path() }}" class="block w-12 h-12 rounded-full overflow-hidden">
             <img
@@ -41,7 +41,7 @@
                 <span class="text-xs ml-1 mr-2 group-hover:text-green-600 transition duration-200" style="min-width:20px"></span>
             </button> 
             
-            <x-tweet.like-btn :tweet="$tweet" :likeId="$tweet->getLikeBy(current_user())"/> 
+            <x-tweet.like-btn :tweet="$tweet" :like_id="$tweet->getLikeBy(current_user())"/> 
 
             <div class="">
                 <a href="#" style="" class="w-9 h-9 flex items-center justify-center rounded-full transition duration-200

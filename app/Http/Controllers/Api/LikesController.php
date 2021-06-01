@@ -13,19 +13,19 @@ class LikesController extends Controller
     {
         try 
         {
-            //$tweet = Tweet::withCount('likes')->findOrFail($request->input('data.attributes.tweetId'));
+            //$tweet = Tweet::withCount('likes')->findOrFail($request->input('data.attributes.tweet_id'));
             //$like = $tweet->like(current_user());  
             //$likes = $tweet->likes()->count();
             
             
             
-            $tweet_id = $request->input('data.attributes.tweetId');
+            $tweet_id = $request->input('data.attributes.tweet_id');
             $like = Like::create([
                 'user_id' => current_user()->id,
                 'tweet_id' => $tweet_id,
                 'liked' => 1
             ]);
-            $likes = Like::where('tweet_id', $tweet_id)->count();
+            $likes_count = Like::where('tweet_id', $tweet_id)->count();
             
 
             return response()->json([
@@ -34,7 +34,7 @@ class LikesController extends Controller
                     [
                         'type' => 'tweet',
                         'id' => $tweet_id,
-                        'attributes' => [ 'likes' => $likes]   //$tweet->likes_count]
+                        'attributes' => [ 'likes_count' => $likes_count]   //$tweet->likes_count]
                     ],
                     [
                         'type' => 'like',
@@ -67,7 +67,7 @@ class LikesController extends Controller
             $like = current_user()->likes()->findOrFail($id);
             $tweet_id = $like->tweet_id;
             $like->delete();
-            $likes = Like::where('tweet_id', $tweet_id)->count();
+            $likes_count = Like::where('tweet_id', $tweet_id)->count();
 
             return response()->json([
                 'success' => true,
@@ -75,7 +75,7 @@ class LikesController extends Controller
                     [
                         'type' => 'tweet',
                         'id' => $tweet_id,
-                        'attributes' => ['likes' => $likes]
+                        'attributes' => ['likes_count' => $likes_count]
                     ],
                 ]
             ], 200);    

@@ -11,6 +11,9 @@ class Tweet extends Model
     
     protected $guarded = [];
 
+    protected $appends = ['published_date'];
+
+
     public function getPublishedDateAttribute()
     {
         if($this->created_at->diffInSeconds() <= 60)

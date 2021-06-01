@@ -1,15 +1,13 @@
-@props([
-    'tweets', 
-])
+<div class="js-timeline timeline timeline--loading">  
 
-<div class="js-timeline [ divide-y divide-gray-200 ] border-b border-gray-200">
-    @forelse ($tweets as $tweet)
-        @include('partials/_tweet')
-    @empty
-        <p class="my-4 mx-6">No tweets yet!</p>    
-    @endforelse
 </div>
-<div class="py-4 mx-auto bg-bluegray-50">{{ $tweets->onEachSide(2)->links() }}</div>
+    
+{{-- <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-twitter" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+</svg> --}}
+    
+
 
 
 

@@ -12,13 +12,21 @@ const mix = require('laravel-mix');
  */
 
 mix.js("resources/js/app.js","public/js")
+    .sourceMaps()   
     .postCss("resources/css/app.css", "public/css", [
         require("postcss-import"),
         require("tailwindcss"),
     ])
-    .browserSync('laravel-twitter-clone.test:8080/')
-    .version(); 
+    .browserSync({
+        proxy: null, //'laravel-twitter-clone.test:8080',
+        port: 3000,
+        host: 'localhost',
+    });
 
+if (mix.inProduction()) {
+    //mix.version();
+    //mix.disableNotifications();
+}
 
 mix.webpackConfig({
     stats: {

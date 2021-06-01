@@ -20,6 +20,7 @@ module.exports = {
       twdarkblue: '#1A91DA',
       twlightblue: '#E8F5FE',  
       twlightblue100: '#DAE8F2',  
+      twlightblue200: '#bae6fd',  
       twrose: '#e0245e',
       twinput: '#EBEEF0',
       twgray150: '#EFF1F2',

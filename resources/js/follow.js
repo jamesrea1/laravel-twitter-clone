@@ -1,6 +1,6 @@
 /** @module follow */
 
-export const follow = (button) => {
+export const followInitialise = (button) => {
 
     function sendRequest(){
         const followingUserId = button.dataset.followingUserId;

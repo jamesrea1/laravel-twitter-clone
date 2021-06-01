@@ -3,22 +3,25 @@
 import {updateLikeButtonStyle} from './tweet-like.js'
 
 export const tweetMake = ({id, attributes}) => {
-
+    
     const {
-        publishedDate,
+        published_date,
         body,
-        profileLink,
-        avatar,
-        name,
+
+        user_id,
         username,
-        likeId,
-        likesCount,
+        name,
+        profile,
+        avatar,
+        
+        like_id,
+        likes_count,
     } = attributes;
         
     const html = `
-        <div data-tweet-id="${id}" class="js-tweet flex px-4 pt-3 pb-1 cursor-pointer hover:bg-gray-50 transition-colors duration-200">
+        <div data-tweet-id="${id}" class="js-tweet flex px-4 pt-3 pb-1 cursor-pointer border-b border-gray-200 hover:bg-gray-50 transition-colors duration-200">
             <div class="mr-3 flex-shrink-0">
-                <a href="${profileLink}" class="block w-12 h-12 rounded-full overflow-hidden">
+                <a href="${profile}" class="block w-12 h-12 rounded-full overflow-hidden">
                     <img
                         src="${avatar}"
                         alt="${username}"
@@ -26,13 +29,16 @@ export const tweetMake = ({id, attributes}) => {
                     >
                 </a>
             </div>
+
+            <div class="text-xl mr-8">${id} / ${user_id}</div>
+
             <div class="flex-auto min-w-0">
                 <h5 class="flex items-center whitespace-nowrap">
-                    <a href="${profileLink}" class="group font-bold truncate inline-block" style="max-width: 80%">
+                    <a href="${profile}" class="group font-bold truncate inline-block" style="max-width: 80%">
                         <span class="group-hover:underline">${name}</span>
                         <span class="text-bluegray-500 font-normal ml-0.5"> @${username}</span>
                     </a>
-                    <span class="text-bluegray-500 font-normal block ml-1">· ${publishedDate}</span>
+                    <span class="text-bluegray-500 font-normal block ml-1">· ${published_date}</span>
                 </h5>
 
                 <p class="mt-1 break-words">
@@ -59,14 +65,14 @@ export const tweetMake = ({id, attributes}) => {
                         <span class="text-xs ml-1 mr-2 group-hover:text-green-600 transition duration-200" style="min-width:20px"></span>
                     </button> 
                     
-                    <button data-like-id="${likeId}" class="js-tweetLikeBtn inline-flex items-center group cursor-pointer text-bluegray-500">
+                    <button data-like-id="${like_id}" class="js-tweetLikeBtn inline-flex items-center group cursor-pointer text-bluegray-500">
                         <div class="w-9 h-9 flex items-center justify-center rounded-full transition duration-200
                             group-hover:text-twrose group-hover:bg-twrose group-hover:bg-opacity-10
                         ">
                             <svg class="js-likedIcon w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24" ><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12z"></path></g></svg>
                             <svg class="js-likeIcon w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><g><path d="M12 21.638h-.014C9.403 21.59 1.95 14.856 1.95 8.478c0-3.064 2.525-5.754 5.403-5.754 2.29 0 3.83 1.58 4.646 2.73.814-1.148 2.354-2.73 4.645-2.73 2.88 0 5.404 2.69 5.404 5.755 0 6.376-7.454 13.11-10.037 13.157H12zM7.354 4.225c-2.08 0-3.903 1.988-3.903 4.255 0 5.74 7.034 11.596 8.55 11.658 1.518-.062 8.55-5.917 8.55-11.658 0-2.267-1.823-4.255-3.903-4.255-2.528 0-3.94 2.936-3.952 2.965-.23.562-1.156.562-1.387 0-.014-.03-1.425-2.965-3.954-2.965z"></path></g></svg>    
                         </div>
-                        <span class="js-likes text-xs ml-1 mr-2 group-hover:text-twrose transition duration-200" style="min-width:20px">${likesCount || ''}</span>
+                        <span class="js-likesCount text-xs ml-1 mr-2 group-hover:text-twrose transition duration-200" style="min-width:20px">${likes_count || ''}</span>
                     </button> 
 
                     <div class="">
@@ -89,8 +95,9 @@ export const tweetMake = ({id, attributes}) => {
     }
 
     const tweetFragment = parseHTML(html);
+    
     updateLikeButtonStyle(tweetFragment.querySelector('.js-tweetLikeBtn'), 
-        likeId
+        like_id
     );
 
     return tweetFragment;

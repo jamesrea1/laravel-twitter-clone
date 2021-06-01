@@ -1,12 +1,11 @@
 <?php
-
-//DB::listen(function($query){var_dump($query->sql);});
-
+//Illuminate\Support\Facades\DB::listen(function($query){var_dump($query->sql);});
+\Illuminate\Support\Facades\DB::enableQueryLog(); 
+// dumplog();
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Use App\Models\Tweet;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +29,7 @@ Route::middleware('auth')->group(function (){
     Route::prefix('api')->group(function () {
         
         /* tweets */
+        Route::get('/tweets', [App\Http\Controllers\Api\TweetsController::class, 'index']);
         Route::post('/tweets', [App\Http\Controllers\Api\TweetsController::class, 'store']);
         
         /* likes */

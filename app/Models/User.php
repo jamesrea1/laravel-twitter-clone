@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Like;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +46,9 @@ class User extends Authenticatable
     ];
 
 
+    protected $appends = ['profile'];
+
+
     public function setPasswordAttribute($value) 
     { 
         $this->attributes['password'] = bcrypt($value); 
@@ -56,15 +61,42 @@ class User extends Authenticatable
     }
 
 
+    public function getProfileAttribute()
+    {
+        return $this->path();
+    }
+
+
     public function timeline()
     {
         $friends = $this->follows()->pluck('following_user_id');
 
-        $tweets = Tweet::withLikes()
-                    ->whereIn('user_id', $friends)
-                    ->orWhere('user_id', $this->id)
-                    ->latest()->paginate(10);
-        return $tweets;
+        $getLike = Like::select('id')
+            ->whereColumn('tweet_id', 'tweets.id')
+            ->where('user_id', current_user()->id)
+            ->limit(1)
+            ->getQuery();
+
+        $tweetsPaginator = Tweet::
+            select(['id', 'user_id', 'body', 'created_at'])
+            ->withLikes()
+            ->selectSub($getLike, 'like_id')
+            ->with('user:id,username,name,avatar')  
+            // ->with(['user' => function ($query) {
+            //     $query->select('id','username','name','avatar')
+            //     ->selectRaw('CONCAT("'.URL('profiles').'/", username) as profile');
+            // }])  
+            ->where(function (Builder $query) use ($friends) {
+                return $query->whereIn('user_id', $friends)
+                             ->orWhere('user_id', $this->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->cursorPaginate(10);
+
+        //dumplog(2);
+        
+        return $tweetsPaginator;
     }
 
 

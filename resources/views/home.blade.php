@@ -8,7 +8,7 @@
         <x-home.publish-tweet-panel />
         <x-shared.content-seperator />
     </div>
-    <x-home.timeline :tweets="$tweets" />
+    <x-home.timeline />
     {{-- / end main content --}}
 
 

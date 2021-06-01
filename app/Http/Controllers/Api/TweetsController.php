@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class TweetsController extends Controller
 {
+    public function index(Request $request)
+    {        
+        return current_user()->timeline();
+    }
+
     public function store(Request $request)
     {        
         // this will automatically generate a ValidationException and return a 422 error response when request is invalid
@@ -19,7 +24,6 @@ class TweetsController extends Controller
             'user_id' => current_user()->id,
             'body' => $attributes['data']['attributes']['body']
         ]);
-        //$tweet->loadCount('likes');
 
         return response()->json([
             'success' => true,
@@ -28,23 +32,26 @@ class TweetsController extends Controller
                     'type' => 'tweet',
                     'id' => $tweet->id,
                     'attributes' => [ 
-                        'publishedDate' => 'now', //$tweet->published_date,
+                        'published_date' => 'now', //$tweet->published_date,
                         'body' => $tweet->body,
-                        'profileLink' => $tweet->user->path(),
+                        'profile' => $tweet->profile,
                         'avatar' => $tweet->user->avatar,
                         'name' => $tweet->user->name,
                         'username' => $tweet->user->username,
-                        'likeId' => null, //$tweet->getLikeBy(current_user()),
-                        'likesCount' => 0, //$tweet->likes_count,
+                        'like_id' => null, //$tweet->getLikeBy(current_user()),
+                        'likes_count' => 0, //$tweet->likes_count,
                     ],
                 ],
             ]
         ], 201);
-
-        
         
         // $html = view('partials._tweet')->with(compact('tweet'))->render(); 
         // return response()->json(['success' => true, 'html' => $html], 201);
-
     }
+
+    
 }
+
+
+
+    

@@ -11,7 +11,7 @@
 
           
 
-                <x-form-input-floating 
+                {{-- <x-form-input-floating 
                     id="username_"
                     name="username_"
                     label="User Name"
@@ -26,7 +26,7 @@
                     placeholder="Name"
                     type="text"
                     value="" 
-                />
+                /> --}}
 
 
                 <div class="mb-4   mt-20">

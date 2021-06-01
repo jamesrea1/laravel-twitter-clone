@@ -25,9 +25,13 @@ export const tweetPublish = (publishContainer, timeline) => {
             payload
         ); 
     }
+
+
     function extractResponseData(response){
         return response.data.html
     }
+
+
     function updateUI(html){ 
         function parseHTML(html) {
             var t = document.createElement('template');
@@ -35,13 +39,14 @@ export const tweetPublish = (publishContainer, timeline) => {
             return t.content;
         }
         const tweetFragment = parseHTML(html);
-        // const timeline = document.querySelector('.js-timeline');
         timeline.insertBefore(tweetFragment, timeline.firstChild);
 
         tweetComposeBody.value = "";
         const evt = new Event("input", {"bubbles":true, "cancelable":false});
         tweetComposeBody.dispatchEvent(evt)
     }
+
+
     function handleError(error){
         if (error.response) {
             console.error("Server responded with a status code not in 200 range");
@@ -57,6 +62,8 @@ export const tweetPublish = (publishContainer, timeline) => {
             console.error('Error: ', error.message);
         }
     }
+
+
     function handleEvent(event){
         // event is delegated to the container, so check event target
         if(!publishContainer.querySelector('.js-tweetPublishSubmit').contains(event.target)){
@@ -67,6 +74,7 @@ export const tweetPublish = (publishContainer, timeline) => {
         .then(updateUI)
         .catch(handleError);
     }
+    
     
     const tweetComposeBody = publishContainer.querySelector('.js-tweetComposeBody');
     if(publishContainer){

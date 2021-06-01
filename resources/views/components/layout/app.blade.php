@@ -3,8 +3,8 @@
         <header class="flex flex-col items-end flex-grow">
             <x-layout.header />
         </header>
-        <main class="flex flex-col items-start flex-grow">
-            <div class="l-main flex items-stretch justify-between">
+        <main class="flex flex-col items-stretch flex-grow">
+            <div class="l-main flex items-stretch justify-between min-h-screen">
                 <div class="l-content w-full border-l border-r border-gray-200">
                     {{ $slot }}
                 </div>
