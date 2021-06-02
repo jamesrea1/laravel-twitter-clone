@@ -22,9 +22,10 @@ mix.js("resources/js/app.js","public/js")
         port: 3000,
         host: 'localhost',
     });
+    
+mix.version();
 
 if (mix.inProduction()) {
-    //mix.version();
     //mix.disableNotifications();
 }
 

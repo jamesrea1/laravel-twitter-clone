@@ -58,7 +58,7 @@ export const timelineInitialise = (timelineContainer) => {
         }
         
         const timelinePage = document.createElement('div');
-        timelinePage.classList.add('timeline-page');
+        timelinePage.classList.add('timeline__page');
         timelinePage.appendChild(tweetsFragment);
         
         timelineContainer.classList.remove("timeline--loading");

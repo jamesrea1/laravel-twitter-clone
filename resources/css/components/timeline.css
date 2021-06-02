@@ -10,7 +10,7 @@
     width: 28px;
 }
 
-.timeline-page{
+.timeline__page{
     opacity: 0;
     animation: 500ms 1 forwards timelineFadeIn;
 }
@@ -24,7 +24,7 @@
 }
 
 
-.timeline-published{
+.timeline__published-tweet{
     opacity: 0;
     animation: 500ms 1 forwards timelineSlideIn;
 }
@@ -32,11 +32,11 @@
     from{
         opacity: 0;
         /* transform: translateY(-100px); */
-        margin-top:-50px;
-    };
+        margin-top:-100px;
+    }
     50%{
         opacity: 0;
-    };
+    }
     to{
         opacity: 1; 
         /* transform: translateY(0px); */

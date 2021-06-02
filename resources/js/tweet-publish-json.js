@@ -42,8 +42,7 @@ export const tweetPublishInitialise = (publishContainer, timeline) => {
     function updateUI(tweetData){ 
         // render tweet
         const tweetFragment = tweetMake(tweetData);
-        debugger;
-        tweetFragment.firstElementChild.classList.add("timeline-published");
+        tweetFragment.firstElementChild.classList.add("timeline__published-tweet");
         timeline.insertBefore(tweetFragment, timeline.firstChild);
 
         // reset tweet compose textarea, and progress status

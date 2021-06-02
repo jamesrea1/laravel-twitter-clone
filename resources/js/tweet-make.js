@@ -30,7 +30,7 @@ export const tweetMake = ({id, attributes}) => {
                 </a>
             </div>
 
-            <div class="text-xl mr-8">${id} / ${user_id}</div>
+            <div class="debug hidden text-xl mr-8">${id} / ${user_id}</div> 
 
             <div class="flex-auto min-w-0">
                 <h5 class="flex items-center whitespace-nowrap">
